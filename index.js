@@ -27,6 +27,12 @@ app.get("/cars/:id", function(pet, resp){
 
 })
 
+app.delete("/cars/delete/:id", function(pet, resp){
+    deleteCocheID(function(mensaje){
+        resp.send(mensaje)
+    }, pet.params.id)
+})
+
 //"capa" de acceso a datos (no aparecen referencias al API de Express)
 function listarCoches(callback) {
     knex.select().from('Coches')
@@ -39,6 +45,13 @@ function listarCocheID(callback, id) {
     knex.select().from('Coches').where('id', id)
     .then(function(datos){
       callback(datos)
+    })
+}
+
+function deleteCocheID(callback, id) {
+    knex.delete('Coches').where('id', id).del()
+    .then(function(){
+        callback("Borrado exitosamente!")
     })
 }
 
