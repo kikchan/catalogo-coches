@@ -13,6 +13,7 @@ app.get("/", function(pet, resp) {
     resp.redirect('/cars')
 })
 
+//API: get all cars
 app.get("/cars", function(pet, resp){
     listarCoches(function(datos){
         resp.send(datos)
@@ -20,6 +21,7 @@ app.get("/cars", function(pet, resp){
 
 })
 
+//API: get car by ID
 app.get("/cars/:id", function(pet, resp){
     listarCocheID(function(datos){
         resp.send(datos)
@@ -27,13 +29,15 @@ app.get("/cars/:id", function(pet, resp){
 
 })
 
-app.delete("/cars/delete/:id", function(pet, resp){
+//API: delete car by ID
+app.delete("/cars/:id", function(pet, resp){
     deleteCocheID(function(mensaje){
         resp.send(mensaje)
     }, pet.params.id)
 })
 
 //"capa" de acceso a datos (no aparecen referencias al API de Express)
+//Lista todos los coches
 function listarCoches(callback) {
     knex.select().from('Coches')
     .then(function(datos){
@@ -41,6 +45,7 @@ function listarCoches(callback) {
     })
 }
 
+//Lista un coche dado su ID
 function listarCocheID(callback, id) {
     knex.select().from('Coches').where('id', id)
     .then(function(datos){
@@ -48,13 +53,15 @@ function listarCocheID(callback, id) {
     })
 }
 
+//Borra un coche dado su ID
 function deleteCocheID(callback, id) {
-    knex.delete('Coches').where('id', id).del()
+    knex('Coches').where('id', id).del()
     .then(function(){
         callback("Borrado exitosamente!")
     })
 }
 
+//Pone el servidor en marcha
 app.listen(3000, function(){
-    console.log("Servidor en marcha!!")
+    console.log("Esperando peticiones por el puerto 3000")
 })
