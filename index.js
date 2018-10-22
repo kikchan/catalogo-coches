@@ -49,6 +49,13 @@ app.post("/cars", function(pet, resp) {
     }, pet.body)
 })
 
+//API: put car by ID
+app.put("/cars", function(pet, resp) {
+    editarCoche(function(mensaje){
+        resp.send(mensaje)
+    }, pet.body)
+})
+
 /*
 * "capa" de acceso a datos (no aparecen referencias al API de Express)
 */
@@ -92,6 +99,20 @@ function crearCoche(callback, coche) {
         console.log("  -"  + coche.pais_fabricacion)
 
         callback("Insertado correctamente")
+    })
+}
+
+//Edita un coche existente
+function editarCoche(callback, coche) {
+    knex('Coches').where('id', coche.id).update(coche).then(function (mensaje) {
+        console.log("Editado coche:")
+        console.log("  -"  + coche.id)
+        console.log("  -"  + coche.marca)
+        console.log("  -"  + coche.modelo)
+        console.log("  -"  + coche.fecha_matriculacion)
+        console.log("  -"  + coche.pais_fabricacion)
+
+        callback("Editado correctamente")
     })
 }
 
