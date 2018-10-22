@@ -42,6 +42,13 @@ app.get("/available", function(pet, resp){
     })
 })
 
+//API: get all available cars from a given year
+app.get("/available/:year", function(pet, resp) {
+    listarCochesDisponiblesPorAnyo(function(datos) {
+        resp.send(datos)
+    }, pet.params.year)
+})
+
 //API: delete car by ID
 app.delete("/cars/:id", function(pet, resp){
     deleteCocheID(function(mensaje){
@@ -70,7 +77,7 @@ app.put("/cars", function(pet, resp) {
 function listarCoches(callback) {
     knex.select().from('Coches')
     .then(function(datos){
-        console.log("Listados todos los coches")
+        console.log("Listando todos los coches")
 
         callback(datos)
     })
@@ -80,7 +87,7 @@ function listarCoches(callback) {
 function listarCocheID(callback, id) {
     knex.select().from('Coches').where('id', id)
     .then(function(datos){
-        console.log("Listado coche con ID: " + id)
+        console.log("Listando coche con ID: " + id)
 
         callback(datos)
     })
@@ -96,11 +103,32 @@ function listarCochesDisponibles(callback) {
     })
 }
 
+//Lista todos los coches disponibles a partir de un año
+function listarCochesDisponiblesPorAnyo(callback, year) {
+    knex('Coches').where('disponible', 'si')
+        .andWhere('fecha_matriculacion', '>=', year)
+        .then(function(datos) {
+            console.log("Listando coches disponibles a partir del año " + year)
+
+            callback(datos)
+        })
+}
+
+//Lista todos los coches a partir de un año dado
+function listarCochesDisponibles(callback) {
+    knex.select().from('Coches').where('disponible', 'si')
+    .then(function(datos){
+        console.log("Listando todos los coches disponibles")
+
+        callback(datos)
+    })
+}
+
 //Borra un coche dado su ID
 function deleteCocheID(callback, id) {
     knex('Coches').where('id', id).del()
     .then(function(){
-        console.log("Borrado coche: " + id)
+        console.log("Borrando coche: " + id)
 
         callback("Borrado exitosamente!")
     })
@@ -109,7 +137,7 @@ function deleteCocheID(callback, id) {
 //Crea un coche nuevo
 function crearCoche(callback, coche) {
     knex('Coches').insert(coche).then(function (mensaje) {
-        console.log("Insertado coche:")
+        console.log("Insertando coche:")
         console.log("  -"  + coche.marca)
         console.log("  -"  + coche.modelo)
         console.log("  -"  + coche.fecha_matriculacion)
@@ -122,7 +150,7 @@ function crearCoche(callback, coche) {
 //Edita un coche existente
 function editarCoche(callback, coche) {
     knex('Coches').where('id', coche.id).update(coche).then(function (mensaje) {
-        console.log("Editado coche:")
+        console.log("Editando coche:")
         console.log("  -"  + coche.id)
         console.log("  -"  + coche.marca)
         console.log("  -"  + coche.modelo)
