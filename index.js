@@ -1,14 +1,20 @@
-var express = require('express')
+var express = require('express'), bodyParser = require('body-parser')
 var app = express()
+
+app.use(bodyParser.json())
 
 var knex = require('knex')({
     client: 'sqlite3',
     connection: {
       filename: "./coches.db"
-    }
+    },
+    
+    useNullAsDefault: true
 });
 
-//"capa" web (no aparecen referencias al API de Knex)
+/*
+* "capa" web (no aparecen referencias al API de Knex)
+*/
 app.get("/", function(pet, resp) {
     resp.redirect('/cars')
 })
@@ -36,12 +42,23 @@ app.delete("/cars/:id", function(pet, resp){
     }, pet.params.id)
 })
 
-//"capa" de acceso a datos (no aparecen referencias al API de Express)
+//API: post car by ID
+app.post("/cars", function(pet, resp) {
+    crearCoche(function(mensaje){
+        resp.send(mensaje)
+    }, pet.body)
+})
+
+/*
+* "capa" de acceso a datos (no aparecen referencias al API de Express)
+*/
 //Lista todos los coches
 function listarCoches(callback) {
     knex.select().from('Coches')
     .then(function(datos){
-      callback(datos)
+        console.log("Listados todos los coches")
+
+        callback(datos)
     })
 }
 
@@ -49,7 +66,9 @@ function listarCoches(callback) {
 function listarCocheID(callback, id) {
     knex.select().from('Coches').where('id', id)
     .then(function(datos){
-      callback(datos)
+        console.log("Listado coche con ID: " + id)
+
+        callback(datos)
     })
 }
 
@@ -57,7 +76,22 @@ function listarCocheID(callback, id) {
 function deleteCocheID(callback, id) {
     knex('Coches').where('id', id).del()
     .then(function(){
+        console.log("Borrado coche: " + id)
+
         callback("Borrado exitosamente!")
+    })
+}
+
+//Crea un coche nuevo
+function crearCoche(callback, coche) {
+    knex('Coches').insert(coche).then(function (mensaje) {
+        console.log("Insertado coche:")
+        console.log("  -"  + coche.marca)
+        console.log("  -"  + coche.modelo)
+        console.log("  -"  + coche.fecha_matriculacion)
+        console.log("  -"  + coche.pais_fabricacion)
+
+        callback("Insertado correctamente")
     })
 }
 
