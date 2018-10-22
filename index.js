@@ -35,6 +35,13 @@ app.get("/cars/:id", function(pet, resp){
 
 })
 
+//API: get all available cars
+app.get("/available", function(pet, resp){
+    listarCochesDisponibles(function(datos) {
+        resp.send(datos)
+    })
+})
+
 //API: delete car by ID
 app.delete("/cars/:id", function(pet, resp){
     deleteCocheID(function(mensaje){
@@ -74,6 +81,16 @@ function listarCocheID(callback, id) {
     knex.select().from('Coches').where('id', id)
     .then(function(datos){
         console.log("Listado coche con ID: " + id)
+
+        callback(datos)
+    })
+}
+
+//Lista todos los coches disponibles
+function listarCochesDisponibles(callback) {
+    knex.select().from('Coches').where('disponible', 'si')
+    .then(function(datos){
+        console.log("Listando todos los coches disponibles")
 
         callback(datos)
     })
