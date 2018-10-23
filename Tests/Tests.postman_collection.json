@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "localhost:3000/test",
+			"name": "Initialize the database",
 			"event": [
 				{
 					"listen": "test",
@@ -86,7 +86,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/cars",
+			"name": "List all cars",
 			"event": [
 				{
 					"listen": "test",
@@ -192,7 +192,7 @@
 			]
 		},
 		{
-			"name": "localhost:3000/cars/9",
+			"name": "List details of car 9",
 			"event": [
 				{
 					"listen": "test",
@@ -241,7 +241,7 @@
 			"response": []
 		},
 		{
-			"name": "ER localhost:3000/cars/9",
+			"name": "[404] List details of car 9-9",
 			"event": [
 				{
 					"listen": "test",
@@ -277,7 +277,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/available",
+			"name": "List available cars",
 			"event": [
 				{
 					"listen": "test",
@@ -363,7 +363,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/available/2010",
+			"name": "Show available cars after 2010",
 			"event": [
 				{
 					"listen": "test",
@@ -412,7 +412,7 @@
 			"response": []
 		},
 		{
-			"name": "ER localhost:3000/available/2015",
+			"name": "[404] Show available cars after 2015",
 			"event": [
 				{
 					"listen": "test",
@@ -446,6 +446,133 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete car with ID  = 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "148c486e-96fe-4731-b4da-253214402824",
+						"exec": [
+							"pm.response.to.have.status(200);",
+							"",
+							"tests[\"The car was deleted\"] = responseBody == \"Successfully deleted!\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all cars after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e1b752da-bf45-4f0d-8d34-84580df1e389",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"    ",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"There are 6 cars in total\"] = cars.length == 6;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "localhost:3000/cars",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/cars",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "875"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"36b-yMZbhc1WRKbBeVEeeUUo7WPE0Jk\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 20 Oct 2018 13:11:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"maker\": \"BMW\",\n        \"model\": \"E46\",\n        \"year\": \"2002\",\n        \"country\": \"Germany\",\n        \"mileage\": 402.462,\n        \"available\": \"yes\",\n        \"price\": 2400\n    },\n    {\n        \"id\": 2,\n        \"maker\": \"Ferrari\",\n        \"model\": \"F40\",\n        \"year\": \"1990\",\n        \"country\": \"Italy\",\n        \"mileage\": 46.845,\n        \"available\": \"no\",\n        \"price\": 80000\n    },\n    {\n        \"id\": 3,\n        \"maker\": \"Mercedes\",\n        \"model\": \"W204\",\n        \"year\": \"2008\",\n        \"country\": \"Germany\",\n        \"mileage\": 112.654,\n        \"available\": \"yes\",\n        \"price\": 18000\n    },\n    {\n        \"id\": 4,\n        \"maker\": \"Renault\",\n        \"model\": \"Mégane\",\n        \"year\": \"2007\",\n        \"country\": \"France\",\n        \"mileage\": 98.223,\n        \"available\": \"yes\",\n        \"price\": 12000\n    },\n    {\n        \"id\": 7,\n        \"maker\": \"Alfa Romeo\",\n        \"model\": \"159 JTD\",\n        \"year\": \"2005\",\n        \"country\": \"Italy\",\n        \"mileage\": 156.784,\n        \"available\": \"no\",\n        \"price\": 8900\n    },\n    {\n        \"id\": 8,\n        \"maker\": \"Volkswagen\",\n        \"model\": \"Golf GTI\",\n        \"year\": \"2015\",\n        \"country\": \"Germany\",\n        \"mileage\": 76.541,\n        \"available\": \"no\",\n        \"price\": 26000\n    },\n    {\n        \"id\": 9,\n        \"maker\": \"Audi\",\n        \"model\": \"S8\",\n        \"year\": \"2013\",\n        \"country\": \"Germany\",\n        \"mileage\": 99.984,\n        \"available\": \"yes\",\n        \"price\": 45000\n    }\n]"
+				}
+			]
 		}
 	]
 }

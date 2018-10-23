@@ -20,9 +20,9 @@ app.get("/", function(req, res) {
 })
 
 app.post("/test", function(req, res) {
-  //Restore the original DB for testing
-  copyFile('./DB backup/catalogue.db', './');
-  res.status(200).send('Database restored for testing')
+    //Restore the original DB for testing
+    copyFile('./DB backup/catalogue.db', './');
+    res.status(200).send('Database restored for testing')
 })
 
 //API: get all cars
@@ -74,7 +74,7 @@ app.get("/available/:year", function(req, res) {
 //API: delete car by ID
 app.delete("/cars/:id", function(req, res){
     deleteCarByID(function(message){
-        res.send(message)
+        res.status(200).send(message)
     }, req.params.id)
 })
 
@@ -187,7 +187,7 @@ var copyFile = (file, dir2)=>{
     source.pipe(dest);
     source.on('end', function() { console.log('Succesfully copied'); });
     source.on('error', function(err) { console.log(err); });
-  };
+};
 
 //Start the server
 app.listen(3000, function(){
