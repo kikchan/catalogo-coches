@@ -6,7 +6,7 @@ app.use(bodyParser.json())
 var knex = require('knex')({
     client: 'sqlite3',
     connection: {
-      filename: "./cars.db"
+      filename: "./catalogue.db"
     },
     
     useNullAsDefault: true
@@ -153,5 +153,5 @@ function editCar(callback, car) {
 
 //Start the server
 app.listen(3000, function(){
-    console.log("Waiting for connections through the port 3000")
+    console.log("Awaiting for connections through the port: 3000")
 })
