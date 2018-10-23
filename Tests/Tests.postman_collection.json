@@ -1,10 +1,44 @@
 {
 	"info": {
-		"_postman_id": "c6faac1e-378a-460f-858b-4af2c32c40ba",
+		"_postman_id": "95955b78-b370-4736-830c-715fe298f83a",
 		"name": "Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "localhost:3000/test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b2e84d04-1421-41cd-8a85-73a722bdec9a",
+						"exec": [
+							"tests[\"Database restored\"] = responseBody == \"Database restored for testing\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/test",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
 		{
 			"name": "Common tests",
 			"event": [
@@ -87,7 +121,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "localhost:3000/cars",
 					"host": [
@@ -105,7 +142,10 @@
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/cars",
 							"host": [
@@ -201,6 +241,42 @@
 			"response": []
 		},
 		{
+			"name": "ER localhost:3000/cars/9",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a87975b0-11cd-44d0-b1db-48651463381a",
+						"exec": [
+							"tests[\"Returns status 404 - No car with that ID\"] = pm.response.to.have.status(404);",
+							"tests[\"Car not found\"] = responseBody == \"Car not found!\""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars/9-9",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars",
+						"9-9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "localhost:3000/available",
 			"event": [
 				{
@@ -219,7 +295,7 @@
 							"    \"mileage\": 402.462,",
 							"    \"available\": \"yes\",",
 							"    \"price\": 2400",
-							"}",
+							"};",
 							"  ",
 							"var mercedes = {",
 							"    \"id\": 3,",
@@ -230,7 +306,7 @@
 							"    \"mileage\": 112.654,",
 							"    \"available\": \"yes\",",
 							"    \"price\": 18000",
-							"}",
+							"};",
 							"",
 							"var renault = {",
 							"    \"id\": 4,",
@@ -241,7 +317,7 @@
 							"    \"mileage\": 98.223,",
 							"    \"available\": \"yes\",",
 							"    \"price\": 12000",
-							"}",
+							"};",
 							" ",
 							"var audi = {",
 							"    \"id\": 9,",
@@ -252,14 +328,15 @@
 							"    \"mileage\": 99.984,",
 							"    \"available\": \"yes\",",
 							"    \"price\": 45000",
-							"}",
+							"};",
 							"",
 							"var cars = JSON.parse(responseBody);",
 							"",
 							"tests[\"The first available car is a BMW\"] = JSON.stringify(cars[0]) == JSON.stringify(bmw);",
 							"tests[\"The second available car is a Mercedes\"] = JSON.stringify(cars[1]) == JSON.stringify(mercedes);",
 							"tests[\"The third available car is a Renault\"] = JSON.stringify(cars[2]) == JSON.stringify(renault);",
-							"tests[\"The forth available car is a Audi\"] = JSON.stringify(cars[3]) == JSON.stringify(audi);"
+							"tests[\"The forth available car is a Audi\"] = JSON.stringify(cars[3]) == JSON.stringify(audi);",
+							"tests[\"There are 4 available cars at the momment\"] = cars.length == 4;"
 						],
 						"type": "text/javascript"
 					}
@@ -280,6 +357,91 @@
 					"port": "3000",
 					"path": [
 						"available"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/available/2010",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8e257683-0b1b-4dea-b4fc-d45e7fa92c5e",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"",
+							"var audi = {",
+							"    \"id\": 9,",
+							"    \"maker\": \"Audi\",",
+							"    \"model\": \"S8\",",
+							"    \"year\": 2013,",
+							"    \"country\": \"Germany\",",
+							"    \"mileage\": 99.984,",
+							"    \"available\": \"yes\",",
+							"    \"price\": 45000",
+							"}",
+							"",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"The only available car made after 2010 is the Audi S8\"] = JSON.stringify(audi) == JSON.stringify(cars[0]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/available/2010",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"available",
+						"2010"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ER localhost:3000/available/2015",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8e257683-0b1b-4dea-b4fc-d45e7fa92c5e",
+						"exec": [
+							"tests[\"Returns status 404 - No available cars after 2015\"] = pm.response.to.have.status(404);",
+							"tests[\"No cars available that are made after 2015\"] = responseBody == \"No available cars from that year [2015] and above!\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/available/2015",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"available",
+						"2015"
 					]
 				}
 			},

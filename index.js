@@ -19,10 +19,20 @@ app.get("/", function(req, res) {
     res.redirect('/cars')
 })
 
+app.post("/test", function(req, res) {
+  //Restore the original DB for testing
+  copyFile('./DB backup/catalogue.db', './');
+  res.status(200).send('Database restored for testing')
+})
+
 //API: get all cars
 app.get("/cars", function(req, res){
     listCars(function(data){
-        res.send(data)
+        if(data.length != 0) {
+            res.send(data)
+        } else {
+            res.status(404).send('There are no cars at all!')
+        }
     })
 
 })
@@ -30,7 +40,11 @@ app.get("/cars", function(req, res){
 //API: get car by ID
 app.get("/cars/:id", function(req, res){
     listCarsByID(function(data){
-        res.send(data)
+        if(data.length != 0) {
+            res.send(data)
+        } else {
+            res.status(404).send('Car not found!')
+        }
     }, req.params.id)
 
 })
@@ -38,14 +52,22 @@ app.get("/cars/:id", function(req, res){
 //API: get all available cars
 app.get("/available", function(req, res){
     listAvailableCars(function(data) {
-        res.send(data)
+        if(data.length != 0) {
+            res.send(data)
+        } else {
+            res.status(404).send('There are no cars available right now!')
+        }
     })
 })
 
-//API: get all available cars greater than a given year
+//API: get all available cars made after a given year
 app.get("/available/:year", function(req, res) {
     listAvailableCarsByYear(function(data) {
-        res.send(data)
+        if(data.length != 0) {
+            res.send(data)
+        } else {
+            res.status(404).send('No available cars from that year [' + req.params.year + '] and above!');
+        }
     }, req.params.year)
 })
 
@@ -103,7 +125,7 @@ function listAvailableCars(callback) {
     })
 }
 
-//List all available cars greater than a given year
+//List all available cars made after a given year
 function listAvailableCarsByYear(callback, year) {
     knex('Cars').where('available', 'yes')
         .andWhere('year', '>=', year)
@@ -150,6 +172,22 @@ function editCar(callback, car) {
         callback("Successfully edited")
     })
 }
+
+//Copy the file to dir
+var copyFile = (file, dir2)=>{
+    //include the fs, path modules
+    var fs = require('fs');
+    var path = require('path');
+  
+    //gets file name and adds it to dir2
+    var f = path.basename(file);
+    var source = fs.createReadStream(file);
+    var dest = fs.createWriteStream(path.resolve(dir2, f));
+  
+    source.pipe(dest);
+    source.on('end', function() { console.log('Succesfully copied'); });
+    source.on('error', function(err) { console.log(err); });
+  };
 
 //Start the server
 app.listen(3000, function(){
