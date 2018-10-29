@@ -154,6 +154,9 @@ function createCar(callback, car) {
         console.log("  -"  + car.model)
         console.log("  -"  + car.year)
         console.log("  -"  + car.country)
+        console.log("  -"  + car.mileage)
+        console.log("  -"  + car.available)
+        console.log("  -"  + car.price)
 
         callback("Successfully inserted")
     })
@@ -162,13 +165,6 @@ function createCar(callback, car) {
 //Edit an existing car
 function editCar(callback, car) {
     knex('Cars').where('id', car.id).update(car).then(function (message) {
-        console.log("Edited car:")
-        console.log("  -"  + car.id)
-        console.log("  -"  + car.maker)
-        console.log("  -"  + car.model)
-        console.log("  -"  + car.year)
-        console.log("  -"  + car.country)
-
         callback("Successfully edited")
     })
 }

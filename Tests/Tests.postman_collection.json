@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "95955b78-b370-4736-830c-715fe298f83a",
+		"_postman_id": "366a2e3c-e715-420b-9250-81c6c1af6e5b",
 		"name": "Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -573,6 +573,164 @@
 					"body": "[\n    {\n        \"id\": 1,\n        \"maker\": \"BMW\",\n        \"model\": \"E46\",\n        \"year\": \"2002\",\n        \"country\": \"Germany\",\n        \"mileage\": 402.462,\n        \"available\": \"yes\",\n        \"price\": 2400\n    },\n    {\n        \"id\": 2,\n        \"maker\": \"Ferrari\",\n        \"model\": \"F40\",\n        \"year\": \"1990\",\n        \"country\": \"Italy\",\n        \"mileage\": 46.845,\n        \"available\": \"no\",\n        \"price\": 80000\n    },\n    {\n        \"id\": 3,\n        \"maker\": \"Mercedes\",\n        \"model\": \"W204\",\n        \"year\": \"2008\",\n        \"country\": \"Germany\",\n        \"mileage\": 112.654,\n        \"available\": \"yes\",\n        \"price\": 18000\n    },\n    {\n        \"id\": 4,\n        \"maker\": \"Renault\",\n        \"model\": \"Mégane\",\n        \"year\": \"2007\",\n        \"country\": \"France\",\n        \"mileage\": 98.223,\n        \"available\": \"yes\",\n        \"price\": 12000\n    },\n    {\n        \"id\": 7,\n        \"maker\": \"Alfa Romeo\",\n        \"model\": \"159 JTD\",\n        \"year\": \"2005\",\n        \"country\": \"Italy\",\n        \"mileage\": 156.784,\n        \"available\": \"no\",\n        \"price\": 8900\n    },\n    {\n        \"id\": 8,\n        \"maker\": \"Volkswagen\",\n        \"model\": \"Golf GTI\",\n        \"year\": \"2015\",\n        \"country\": \"Germany\",\n        \"mileage\": 76.541,\n        \"available\": \"no\",\n        \"price\": 26000\n    },\n    {\n        \"id\": 9,\n        \"maker\": \"Audi\",\n        \"model\": \"S8\",\n        \"year\": \"2013\",\n        \"country\": \"Germany\",\n        \"mileage\": 99.984,\n        \"available\": \"yes\",\n        \"price\": 45000\n    }\n]"
 				}
 			]
+		},
+		{
+			"name": "Insert a new car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1522df43-5baa-4dfd-95da-ac3564416a10",
+						"exec": [
+							"commonTests[\"Returns 200\"] = pm.response.to.have.status(200);",
+							"tests[\"Returns success message\"] = responseBody == \"Successfully inserted\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"maker\": \"Audi\",\n    \"model\": \"RS6\",\n    \"year\": 2018,\n    \"country\": \"Germany\",\n    \"mileage\": 6.204,\n    \"available\": \"yes\",\n    \"price\": 105000\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all cars after insert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "16291f4c-6387-4e99-a615-7d65d1e690d4",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"    ",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"There are 7 cars in total\"] = cars.length == 7;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit the last car to not available",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6bcc6f02-b592-4935-a4f2-d9d2b1b7709e",
+						"exec": [
+							"commonTests[\"Returns 200\"] = pm.response.to.have.status(200);",
+							"tests[\"Returns success message\"] = responseBody == \"Successfully edited\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 10,\n    \"available\": \"no\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all cars after edit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "16291f4c-6387-4e99-a615-7d65d1e690d4",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"    ",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"There are 7 cars in total\"] = cars.length == 7;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
