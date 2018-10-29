@@ -1,5 +1,7 @@
-var express = require('express'), bodyParser = require('body-parser')
+var express = require('express'), bodyParser = require('body-parser'), jwt = require('jwt-simple')
 var app = express()
+var payload = {foo: 'bar'}
+var secret = Buffer.from('estoEsUnaCadenaRandomQueUtilizareComoContraseña1994-46-92')
 
 app.use(bodyParser.json())
 
@@ -78,17 +80,26 @@ app.delete("/cars/:id", function(req, res){
     }, req.params.id)
 })
 
-//API: post car by ID
+//API: post car
 app.post("/cars", function(req, res) {
     createCar(function(message){
         res.send(message)
     }, req.body)
 })
 
-//API: put car by ID
+//API: put car
 app.put("/cars", function(req, res) {
     editCar(function(message){
         res.send(message)
+    }, req.body)
+})
+
+//API: login
+app.post("/login", function(req, res) {
+    login(function(result){
+        //if(result.username == req.body.username && result.password == req.body.password) res.send("Authenticated")
+        //else res.send("Wrong credentials")
+        res.send(req.body)
     }, req.body)
 })
 
@@ -184,6 +195,13 @@ var copyFile = (file, dir2)=>{
     source.on('end', function() { console.log('Succesfully copied'); });
     source.on('error', function(err) { console.log(err); });
 };
+
+//User login
+function login(result, userData) {
+    knex('Users').where('username', userData.username).andWhere('password', userData.password).select().then(function (datos) {
+        callback(result)
+    })
+}
 
 //Start the server
 app.listen(3000, function(){
