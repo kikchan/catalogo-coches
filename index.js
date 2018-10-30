@@ -97,9 +97,7 @@ app.put("/cars", function(req, res) {
 //API: login
 app.post("/login", function(req, res) {
     login(function(result){
-        //if(result.username == req.body.username && result.password == req.body.password) res.send("Authenticated")
-        //else res.send("Wrong credentials")
-        res.send(req.body)
+        res.send(result)
     }, req.body)
 })
 
@@ -197,9 +195,12 @@ var copyFile = (file, dir2)=>{
 };
 
 //User login
-function login(result, userData) {
-    knex('Users').where('username', userData.username).andWhere('password', userData.password).select().then(function (datos) {
-        callback(result)
+function login(callback, userData) {
+    knex('Users').select().where('username', userData.username).andWhere('password', userData.password).then(function(result) {
+        console.log(result)
+        
+        if(result.length == 1) callback(jwt.encode(payload, secret))
+        else callback("Wrong password or username")
     })
 }
 
