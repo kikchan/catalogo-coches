@@ -97,7 +97,8 @@ app.put("/cars", function(req, res) {
 //API: login
 app.post("/login", function(req, res) {
     login(function(result){
-        res.send(result)
+        if(result == "Wrong username or password") res.status(403).send(result)
+        else res.status(200).send(result)
     }, req.body)
 })
 
@@ -200,7 +201,7 @@ function login(callback, userData) {
         console.log(result)
         
         if(result.length == 1) callback(jwt.encode(payload, secret))
-        else callback("Wrong password or username")
+        else callback("Wrong username or password")
     })
 }
 
