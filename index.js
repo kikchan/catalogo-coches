@@ -2,6 +2,7 @@ var express = require('express'), bodyParser = require('body-parser'), jwt = req
 var app = express()
 var payload = {foo: 'bar'}
 var secret = Buffer.from('estoEsUnaCadenaRandomQueUtilizareComoContraseña1994-46-92')
+var token
 
 app.use(bodyParser.json())
 
@@ -82,9 +83,15 @@ app.delete("/cars/:id", function(req, res){
 
 //API: post car
 app.post("/cars", function(req, res) {
-    createCar(function(message){
-        res.send(message)
-    }, req.body)
+    token = req.headers['authorization']
+
+    console.log(token)
+
+    if(jwt.decode(token, secret)) {
+        createCar(function(message){
+            res.send(message)
+        }, req.body)
+    } else res.status(403).send("You shall not pass!")
 })
 
 //API: put car
@@ -197,9 +204,7 @@ var copyFile = (file, dir2)=>{
 
 //User login
 function login(callback, userData) {
-    knex('Users').select().where('username', userData.username).andWhere('password', userData.password).then(function(result) {
-        console.log(result)
-        
+    knex('Users').select().where('username', userData.username).andWhere('password', userData.password).then(function(result) {        
         if(result.length == 1) callback(jwt.encode(payload, secret))
         else callback("Wrong username or password")
     })
