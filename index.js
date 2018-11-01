@@ -83,15 +83,18 @@ app.delete("/cars/:id", function(req, res){
 
 //API: post car
 app.post("/cars", function(req, res) {
-    token = req.headers['authorization']
+    var header = req.headers['authorization']
+    token = header.split(" ")[1]
 
-    console.log(token)
-
-    if(jwt.decode(token, secret)) {
-        createCar(function(message){
-            res.send(message)
-        }, req.body)
-    } else res.status(403).send("You shall not pass!")
+    try {
+        if(jwt.decode(token, secret)) {
+            createCar(function(message){
+                res.send(message)
+            }, req.body)
+        } else res.status(403).send("You are not allowed")
+    } catch (error) {
+        res.status(400).send("You are not allowed")
+    }
 })
 
 //API: put car
