@@ -76,9 +76,18 @@ app.get("/available/:year", function(req, res) {
 
 //API: delete car by ID
 app.delete("/cars/:id", function(req, res){
-    deleteCarByID(function(message){
-        res.status(200).send(message)
-    }, req.params.id)
+    var header = req.headers['authorization']
+    token = header.split(" ")[1]
+
+    try {
+        if(jwt.decode(token, secret)) {
+            deleteCarByID(function(message){
+                res.status(200).send(message)
+            }, req.params.id)
+        }
+    } catch (error) {
+        res.status(400).send("You are not allowed")
+    }
 })
 
 //API: post car

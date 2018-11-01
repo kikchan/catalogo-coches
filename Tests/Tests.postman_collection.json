@@ -464,6 +464,62 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[400] Delete car with ID  = 1 wrong Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "148c486e-96fe-4731-b4da-253214402824",
+						"exec": [
+							"pm.response.to.have.status(400);",
+							"tests[\"Returns not allowed message\"] = responseBody == \"You are not allowed\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": ".eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -627,7 +683,7 @@
 			"response": []
 		},
 		{
-			"name": "Insert a new car with wrong Token",
+			"name": "[400] Insert a new car with wrong Token",
 			"event": [
 				{
 					"listen": "test",
