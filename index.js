@@ -15,9 +15,9 @@ var knex = require('knex')({
     useNullAsDefault: true
 });
 
-/*
-* WEB LAYER
-*/
+/*******************************************************************
+***************************** WEB LAYER ****************************
+*******************************************************************/
 app.get("/", function(req, res) {
     res.redirect('/cars')
 })
@@ -30,14 +30,24 @@ app.post("/test", function(req, res) {
 
 //API: get all cars
 app.get("/cars", function(req, res){
-    listCars(function(data){
-        if(data.length != 0) {
-            res.send(data)
-        } else {
-            res.status(404).send('There are no cars at all!')
-        }
-    })
 
+    if(req.query.limit != null && req.query.offset != null) {
+        listCarsRange(function(data){
+            if(data.length != 0) {
+                res.send(data)
+            } else {
+                res.status(404).send('There are no cars at all!')
+            }
+        }, req.query.limit, req.query.offset)
+    } else {
+        listCars(function(data){
+            if(data.length != 0) {
+                res.send(data)
+            } else {
+                res.status(404).send('There are no cars at all!')
+            }
+        })
+    }
 })
 
 //API: get car by ID
@@ -130,14 +140,25 @@ app.post("/login", function(req, res) {
     }, req.body)
 })
 
-/*
-* PERSISTANCE LAYER
-*/
+
+/*******************************************************************
+************************* PERSISTANCE LAYER ************************
+*******************************************************************/
 //List all cars
 function listCars(callback) {
     knex.select().from('Cars')
     .then(function(data){
         console.log("Showing all cars")
+
+        callback(data)
+    })
+}
+
+//List all cars from a given range
+function listCarsRange(callback, limit, offset) {
+    knex.select().from('Cars').limit(limit).offset(offset-1)
+    .then(function(data){
+        console.log("Showing " + limit + " cars starting from " + offset)
 
         callback(data)
     })
@@ -216,10 +237,9 @@ function login(callback, userData) {
 }
 
 
-/*
- * AUX METHODS
-*/
-
+/*******************************************************************
+************************* AUXILIAR METHODS *************************
+*******************************************************************/
 //Copy the file to dir
 var copyFile = (file, dir2)=>{
     //include the fs, path modules

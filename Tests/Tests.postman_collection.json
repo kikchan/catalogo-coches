@@ -919,6 +919,134 @@
 				"description": "After the edit of the last car, we list all of them to double-check it."
 			},
 			"response": []
+		},
+		{
+			"name": "Show frist 5 cars",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e47ce18c-73c4-4ba7-b339-d497b691ddec",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"    ",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"There are 5 cars in the first page\"] = cars.length == 5;",
+							"tests[\"The first one is a Ferrari\"] = cars[0].maker == \"Ferrari\";",
+							"tests[\"The second one is a Mercedes\"] = cars[1].maker == \"Mercedes\";",
+							"tests[\"The third one is a Renault\"] = cars[2].maker = \"Renault\";",
+							"tests[\"The forth one is an Alfa Romeo\"] = cars[3].maker == \"Alfa Romeo\";",
+							"tests[\"The fifth one is a Volkswagen\"] = cars[4].maker == \"Volkswagen\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "limit",
+						"value": "5",
+						"type": "text"
+					},
+					{
+						"key": "offset",
+						"value": "0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars?limit=5&offset=0",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				},
+				"description": "This API call displays the frist 5 cars."
+			},
+			"response": []
+		},
+		{
+			"name": "Show all cars from range 3 to 7",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e47ce18c-73c4-4ba7-b339-d497b691ddec",
+						"exec": [
+							"eval(globals.commonTests)();",
+							"    ",
+							"var cars = JSON.parse(responseBody);",
+							"tests[\"There are 5 cars in the first page\"] = cars.length == 5;",
+							"tests[\"The first one is a Renault\"] = cars[0].maker == \"Renault\";",
+							"tests[\"The second one is a Alfa Romeo\"] = cars[1].maker == \"Alfa Romeo\";",
+							"tests[\"The third one is a Volkswagen\"] = cars[2].maker = \"Volkswagen\";",
+							"tests[\"The forth one is an Audi\"] = cars[3].maker == \"Audi\";",
+							"tests[\"The fifth one is a Audi\"] = cars[4].maker == \"Audi\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "limit",
+						"type": "text",
+						"value": "5"
+					},
+					{
+						"key": "offset",
+						"type": "text",
+						"value": "0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/cars?limit=5&offset=3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "offset",
+							"value": "3"
+						}
+					]
+				},
+				"description": "This API call will display cars from 3 to 7."
+			},
+			"response": []
 		}
 	],
 	"event": [
