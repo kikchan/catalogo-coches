@@ -1,8 +1,25 @@
-var express = require('express'), bodyParser = require('body-parser'), jwt = require('jwt-simple')
+var express = require('express')
+var router = express.Router();
+var bodyParser = require('body-parser')
+var jwt = require('jwt-simple')
+var assert = require('assert')
+var multer = require('multer')
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/images/uploads')
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+var upload = multer({storage: storage})
+
 var app = express()
 var payload = {foo: 'bar'}
-var secret = Buffer.from('estoEsUnaCadenaRandomQueUtilizareComoContraseña1994-46-92')
-var token
+var secret = Buffer.from('thisIsARandomStringThatImGoingToUseAsASecretWordTo123123123Generate-All-The-Tokens@@.-')
+
 
 app.use(bodyParser.json())
 
@@ -88,7 +105,7 @@ app.get("/available/:year", function(req, res) {
 app.delete("/cars/:id", function(req, res){
     try {
         var header = req.headers['authorization']
-        token = header.split(" ")[1]
+        var token = header.split(" ")[1]
     
         if(jwt.decode(token, secret)) {
             deleteCarByID(function(message){
@@ -104,7 +121,7 @@ app.delete("/cars/:id", function(req, res){
 app.post("/cars", function(req, res) {
     try {
         var header = req.headers['authorization']
-        token = header.split(" ")[1]
+        var token = header.split(" ")[1]
     
         if(jwt.decode(token, secret)) {
             createCar(function(message){
@@ -120,7 +137,7 @@ app.post("/cars", function(req, res) {
 app.put("/cars", function(req, res) {
     try {
         var header = req.headers['authorization']
-        token = header.split(" ")[1]
+        var token = header.split(" ")[1]
 
         if(jwt.decode(token, secret)) {
             editCar(function(message){

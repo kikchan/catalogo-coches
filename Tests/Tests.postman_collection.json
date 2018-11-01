@@ -89,6 +89,36 @@
 			"response": []
 		},
 		{
+			"name": "User login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"kiril\",\n\t\"password\": 123\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "This call allows a user to send his credentials to the server and get a Token if they're correct"
+			},
+			"response": []
+		},
+		{
 			"name": "List all cars",
 			"event": [
 				{
