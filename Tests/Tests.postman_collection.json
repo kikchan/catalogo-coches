@@ -90,6 +90,19 @@
 		},
 		{
 			"name": "User login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2a07767b-32eb-4637-9800-a5f20a64b595",
+						"exec": [
+							"pm.response.to.have.status(200);",
+							"tests[\"Returns a token\"] = responseBody == \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -115,6 +128,49 @@
 					]
 				},
 				"description": "This call allows a user to send his credentials to the server and get a Token if they're correct"
+			},
+			"response": []
+		},
+		{
+			"name": "[403] Bad username or password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "769ec485-aaf4-47c6-a244-1cc633a1ce4a",
+						"exec": [
+							"pm.response.to.have.status(403);",
+							"tests[\"Returns an error message\"] = responseBody == \"Wrong username or password\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"kiril\",\n\t\"password\": 12355\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "This is an attempt to login with wrong username and password."
 			},
 			"response": []
 		},
