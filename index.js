@@ -91,7 +91,7 @@ app.post("/cars", function(req, res) {
             createCar(function(message){
                 res.send(message)
             }, req.body)
-        } else res.status(403).send("You are not allowed")
+        }
     } catch (error) {
         res.status(400).send("You are not allowed")
     }
@@ -189,6 +189,19 @@ function editCar(callback, car) {
     })
 }
 
+//User login
+function login(callback, userData) {
+    knex('Users').select().where('username', userData.username).andWhere('password', userData.password).then(function(result) {        
+        if(result.length == 1) callback(jwt.encode(payload, secret))
+        else callback("Wrong username or password")
+    })
+}
+
+
+/*
+ * AUX METHODS
+*/
+
 //Copy the file to dir
 var copyFile = (file, dir2)=>{
     //include the fs, path modules
@@ -204,14 +217,6 @@ var copyFile = (file, dir2)=>{
     source.on('end', function() { console.log('Succesfully copied'); });
     source.on('error', function(err) { console.log(err); });
 };
-
-//User login
-function login(callback, userData) {
-    knex('Users').select().where('username', userData.username).andWhere('password', userData.password).then(function(result) {        
-        if(result.length == 1) callback(jwt.encode(payload, secret))
-        else callback("Wrong username or password")
-    })
-}
 
 //Start the server
 app.listen(3000, function(){

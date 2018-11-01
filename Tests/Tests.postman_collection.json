@@ -627,6 +627,58 @@
 			"response": []
 		},
 		{
+			"name": "Insert a new car with wrong Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1522df43-5baa-4dfd-95da-ac3564416a10",
+						"exec": [
+							"tests[\"Returns 400\"] = pm.response.to.have.status(400);",
+							"tests[\"Returns not allowed message\"] = responseBody == \"You are not allowed\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1zI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"maker\": \"Audi\",\n    \"model\": \"RS6\",\n    \"year\": 2018,\n    \"country\": \"Germany\",\n    \"mileage\": 6.204,\n    \"available\": \"yes\",\n    \"price\": 105000\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/cars",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "List all cars after insert",
 			"event": [
 				{
