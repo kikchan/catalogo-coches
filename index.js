@@ -76,10 +76,10 @@ app.get("/available/:year", function(req, res) {
 
 //API: delete car by ID
 app.delete("/cars/:id", function(req, res){
-    var header = req.headers['authorization']
-    token = header.split(" ")[1]
-
     try {
+        var header = req.headers['authorization']
+        token = header.split(" ")[1]
+    
         if(jwt.decode(token, secret)) {
             deleteCarByID(function(message){
                 res.status(200).send(message)
@@ -92,10 +92,10 @@ app.delete("/cars/:id", function(req, res){
 
 //API: post car
 app.post("/cars", function(req, res) {
-    var header = req.headers['authorization']
-    token = header.split(" ")[1]
-
     try {
+        var header = req.headers['authorization']
+        token = header.split(" ")[1]
+    
         if(jwt.decode(token, secret)) {
             createCar(function(message){
                 res.send(message)
@@ -108,9 +108,18 @@ app.post("/cars", function(req, res) {
 
 //API: put car
 app.put("/cars", function(req, res) {
-    editCar(function(message){
-        res.send(message)
-    }, req.body)
+    try {
+        var header = req.headers['authorization']
+        token = header.split(" ")[1]
+
+        if(jwt.decode(token, secret)) {
+            editCar(function(message){
+                res.send(message)
+            }, req.body)
+        }
+    } catch (error) {
+        res.status(400).send("You are not allowed")
+    }
 })
 
 //API: login
