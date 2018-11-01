@@ -1,25 +1,10 @@
 var express = require('express')
-var router = express.Router();
 var bodyParser = require('body-parser')
 var jwt = require('jwt-simple')
-var assert = require('assert')
-var multer = require('multer')
-
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'public/images/uploads')
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
-    }
-})
-
-var upload = multer({storage: storage})
 
 var app = express()
 var payload = {foo: 'bar'}
 var secret = Buffer.from('thisIsARandomStringThatImGoingToUseAsASecretWordTo123123123Generate-All-The-Tokens@@.-')
-
 
 app.use(bodyParser.json())
 
@@ -36,13 +21,22 @@ var knex = require('knex')({
 ***************************** WEB LAYER ****************************
 *******************************************************************/
 app.get("/", function(req, res) {
-    res.redirect('/cars')
+    res.send("Welcome to Kiril's car catalogue website written in JS and using Express!")
 })
 
 app.post("/test", function(req, res) {
-    //Restore the original DB for testing
-    copyFile('./DB backup/catalogue.db', './');
-    res.status(200).send('Database restored for testing')
+    try {
+        var header = req.headers['authorization']
+        var token = header.split(" ")[1]
+    
+        if(jwt.decode(token, secret)) {
+            //Restore the original DB for testing
+            copyFile('./DB backup/catalogue.db', './');
+            res.status(200).send('Database restored for testing')
+        }
+    } catch (error) {
+        res.status(400).send("You are not allowed")
+    }
 })
 
 //API: get all cars

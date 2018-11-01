@@ -7,6 +7,39 @@
 	},
 	"item": [
 		{
+			"name": "Welcome message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "afbdb57d-c230-4bb0-b00e-a3e7448b20e8",
+						"exec": [
+							"tests[\"Returns 200\"] = pm.response.to.have.status(200);",
+							"tests[\"Returns a welcome message\"] = responseBody == \"Welcome to Kiril's car catalogue website written in JS and using Express!\""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				},
+				"description": "The main page of the website displays a welcome message"
+			},
+			"response": []
+		},
+		{
 			"name": "Initialize the database",
 			"event": [
 				{
@@ -21,6 +54,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.4tDGVdIO-T-gvOR3VxdoESckIHlbnY9bPN9ieNqusmk",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -97,7 +140,7 @@
 						"id": "2a07767b-32eb-4637-9800-a5f20a64b595",
 						"exec": [
 							"pm.response.to.have.status(200);",
-							"tests[\"Returns a token\"] = responseBody == \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c\";"
+							"tests[\"Returns a token\"] = responseBody == \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.4tDGVdIO-T-gvOR3VxdoESckIHlbnY9bPN9ieNqusmk\";"
 						],
 						"type": "text/javascript"
 					}
@@ -564,7 +607,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.4tDGVdIO-T-gvOR3VxdoESckIHlbnY9bPN9ieNqusmk",
 							"type": "string"
 						}
 					]
@@ -749,7 +792,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.4tDGVdIO-T-gvOR3VxdoESckIHlbnY9bPN9ieNqusmk",
 							"type": "string"
 						}
 					]
@@ -893,7 +936,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.5bolFCz29PYyf2w7Cj0LGPFRvYS19DHBSmBT8yZMV1c",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIifQ.4tDGVdIO-T-gvOR3VxdoESckIHlbnY9bPN9ieNqusmk",
 							"type": "string"
 						}
 					]
