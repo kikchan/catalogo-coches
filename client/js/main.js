@@ -1,7 +1,11 @@
 import { Service_API } from './services/Service_API.js'
 import { compile } from 'handlebars';
 
-var APIservice = new Service_API('http://localhost:3000/cars')
+var APIservice = new Service_API('http://185.207.145.237:3000/cars')
+
+if(APIservice.isOK()) {
+    APIservice = new Service_API('http://localhost:3000/cars')
+}
 
 //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea

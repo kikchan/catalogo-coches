@@ -134,6 +134,34 @@ function () {
         if (response.ok) return response.json();
       });
     }
+  }, {
+    key: "getCar",
+    value: function getCar(id) {
+      return fetch(this.API_URL + '/' + id).then(function (response) {
+        if (response.ok) return response.json();
+      });
+    }
+  }, {
+    key: "addCar",
+    value: function addCar(car) {
+      return fetch(this.API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(car)
+      }).then(function (respuesta) {
+        if (respuesta.ok) return respuesta.json();
+      });
+    }
+  }, {
+    key: "isOK",
+    value: function isOK() {
+      return fetch(this.API_URL).then(function (response) {
+        console.log(JSON.parse(response.body));
+        return JSON.parse(response.body) != "" ? true : false;
+      });
+    }
   }]);
 
   return Service_API;
@@ -9836,9 +9864,14 @@ var _Service_API = require("./services/Service_API.js");
 
 var _handlebars = require("handlebars");
 
-var APIservice = new _Service_API.Service_API('http://localhost:3000/cars'); //Plantilla handlebars para renderizar en HTML un item de la lista
+var APIservice = new _Service_API.Service_API('http://185.207.145.237:3000/cars');
+
+if (APIservice.isOK()) {
+  APIservice = new _Service_API.Service_API('http://localhost:3000/cars');
+} //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
 //Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
+
 
 var templateItem = "\n   <div>\n      <span id=\"{{id}}\">\n         <strong>{{maker}}</strong> <em>{{model}}</em>\n      </span>   \n      <a id=\"enlace_{{id}}\" href=\"javascript:verDetalles({{id}})\">Details</a>\n   </div>\n"; //Plantilla Handlebars para renderizar en HTML la lista de la compra
 //1. El "." significa el objeto del nivel "actual", en nuestro caso es el array
@@ -9886,7 +9919,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33399" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34381" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

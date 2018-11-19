@@ -1,0 +1,21 @@
+@font-face {
+	font-family: 'TheBlacklist';
+	src: url('TheBlacklist.5b5ff4ba.eot');
+	src: local('TheBlacklist'), url('TheBlacklist.df26060b.woff') format('woff'), url('TheBlacklist.2e799046.ttf') format('truetype');
+}
+
+body {
+    background-image: url('background.a7e5beea.jpg');
+}
+
+.title {
+    text-align: center;
+    margin-top: 1em;
+    font-size: 40px;
+    font-weight: bold;
+	font-family: 'TheBlacklist' !important;
+}
+
+.formAddCar {
+    background-color: red;
+}
