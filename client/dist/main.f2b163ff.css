@@ -10,13 +10,15 @@ body {
 
 .container {
     text-align: center;
-    background: #005AA7;
-    background: -webkit-linear-gradient(to right, #FFFDE4, #005AA7);
-    background: linear-gradient(to right, #FFFDE4, #005AA7);
+    background: url('container-background.ce385f65.jpg');
+    background-position: center;
+    background-size: 100%;
+    opacity: 1;
     border: solid black 2px;
     margin: 5em auto 0 auto;
     padding: 5em;
     width: 50%;
+    color: white;
 }
 
 .loginBox {
@@ -28,6 +30,23 @@ body {
     margin-top: 2em;
 }
 
+.logoutBox {
+    position: fixed;
+    top: 12em;
+    right: 22%;
+}
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+}
+
+.wrongCredentials {
+    color: red;
+    animation: blinker 1s linear infinite;
+}
+
 .title {
     text-align: center;
     margin-top: 1em;
@@ -36,6 +55,56 @@ body {
 	font-family: 'TheBlacklist' !important;
 }
 
+.availableCarsList {
+    display: none;
+}
+
 .formAddCar {
     background-color: red;
+}
+
+.button_login {
+	background-color:#456ac7;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #9198ba;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:10px 30px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #0b0747;
+}
+.button_login:hover {
+	background-color:#332abd;
+}
+.button_login:active {
+	position:relative;
+	top:1px;
+}
+
+.button_logout {
+    display: none;
+	background-color:#ff0000;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #ff0000;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:10px 30px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #cf0d0d;
+}
+.button_logout:hover {
+	background-color:#b11212;
+}
+.button_logout:active {
+	position:relative;
+	top:1px;
 }

@@ -176,7 +176,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./../fonts/TheBlacklist/TheBlacklist.eot":[["TheBlacklist.5b5ff4ba.eot","public/fonts/TheBlacklist/TheBlacklist.eot"],"public/fonts/TheBlacklist/TheBlacklist.eot"],"./../fonts/TheBlacklist/TheBlacklist.woff":[["TheBlacklist.df26060b.woff","public/fonts/TheBlacklist/TheBlacklist.woff"],"public/fonts/TheBlacklist/TheBlacklist.woff"],"./../fonts/TheBlacklist/TheBlacklist.ttf":[["TheBlacklist.2e799046.ttf","public/fonts/TheBlacklist/TheBlacklist.ttf"],"public/fonts/TheBlacklist/TheBlacklist.ttf"],"./../images/background.jpg":[["background.a7e5beea.jpg","public/images/background.jpg"],"public/images/background.jpg"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../fonts/TheBlacklist/TheBlacklist.eot":[["TheBlacklist.5b5ff4ba.eot","public/fonts/TheBlacklist/TheBlacklist.eot"],"public/fonts/TheBlacklist/TheBlacklist.eot"],"./../fonts/TheBlacklist/TheBlacklist.woff":[["TheBlacklist.df26060b.woff","public/fonts/TheBlacklist/TheBlacklist.woff"],"public/fonts/TheBlacklist/TheBlacklist.woff"],"./../fonts/TheBlacklist/TheBlacklist.ttf":[["TheBlacklist.2e799046.ttf","public/fonts/TheBlacklist/TheBlacklist.ttf"],"public/fonts/TheBlacklist/TheBlacklist.ttf"],"./../images/background.jpg":[["background.a7e5beea.jpg","public/images/background.jpg"],"public/images/background.jpg"],"./../images/container-background.jpg":[["container-background.ce385f65.jpg","public/images/container-background.jpg"],"public/images/container-background.jpg"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -203,7 +203,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40609" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34859" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

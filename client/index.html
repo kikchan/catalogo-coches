@@ -7,14 +7,17 @@
   <body>
     <div class="title">Welcome to Kiril's car list!</div>
     
-    <div class="container">
-      <div class="loginBox">
-        <h2>Login</h2>
+    <div class="container" id="container">
+      <div class="logoutBox" id="logoutBox"><input type="button" value="Logout" class="button_logout" id="button_logout"></div>
 
+      <div class="loginBox" id="loginBox">
+        <h2>Login</h2>
         <input type="text" id="username" placeholder="Username"></br>
         <input type="password" id="password" placeholder="Password"></br>
-        <input type="button" value="Login" id="button_login">
+        <input type="button" value="Login" class="button_login" id="button_login">
       </div>
+ 
+      <div class="availableCarsList" id="availableCarsList"></div>
     </div>
     
     <script src="./js/main.js"></script>

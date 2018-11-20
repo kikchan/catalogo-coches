@@ -9872,7 +9872,7 @@ var _Service_API = require("./services/Service_API.js");
 var _handlebars = require("handlebars");
 
 var APIservice = new _Service_API.Service_API('http://localhost:3000');
-var token; //Plantilla handlebars para renderizar en HTML un item de la lista
+var myStorage = window.localStorage; //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
 //Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
 
@@ -9883,11 +9883,42 @@ var templateItem = "\n   <div>\n      <span id=\"{{id}}\">\n         <strong>{{m
 //andar concatenando cadenas, esto queda más elegante
 
 var templateList = "\n <h2>Car list</h2>\n {{#.}}\n   ".concat(templateItem, "\n {{/.}}\n");
-var templateDetalles = "\n  <span id=\"details_{{id}}\">\n    {{details}}\n  </span>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
+var templateDetails = "\n  <span id=\"details_{{id}}\">\n    {{details}}\n  </span>\n";
+var wrongUser = "\n  </br></br><strong class=\"wrongCredentials\">Wrong username or password!</strong>\n";
+var welcomeUser = "\n  Hello <strong>{{username}}</strong></br>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 
 var tmpl_carList_compiled = (0, _handlebars.compile)(templateList);
-var tmpl_item_compilada = (0, _handlebars.compile)(templateItem);
-var tmpl_detalles_compilada = (0, _handlebars.compile)(templateDetalles);
+var tmpl_item_compiled = (0, _handlebars.compile)(templateItem);
+var tmpl_detalles_compiled = (0, _handlebars.compile)(templateDetails);
+var tmpl_wrong_username_compiled = (0, _handlebars.compile)(wrongUser);
+var tmpl_welcome_username_compiled = (0, _handlebars.compile)(welcomeUser);
+document.getElementById('button_login').addEventListener('click', function () {
+  var user = {
+    "username": document.getElementById('username').value,
+    "password": document.getElementById('password').value
+  };
+  APIservice.login(user).then(function (result) {
+    if (result == "Wrong username or password") {
+      console.log("Wrong username or password");
+      var loginButton = document.getElementById('button_login');
+      loginButton.insertAdjacentHTML("afterend", wrongUser);
+    } else {
+      myStorage.username = user.username;
+      myStorage.token = result;
+      var divContainer = document.getElementById('container');
+      divContainer.style.background = "black";
+      divContainer.style.opacity = 0.8;
+      var divLoginBox = document.getElementById("loginBox");
+      divLoginBox.style.display = "none";
+      var divAvailableCars = document.getElementById("availableCarsList");
+      divAvailableCars.style.display = "inline";
+      var logoutButton = document.getElementById('button_logout');
+      var username = tmpl_welcome_username_compiled(user);
+      logoutButton.insertAdjacentHTML('beforebegin', username);
+      logoutButton.style.display = "inline";
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   console.log("Page loaded @ " + new Date().toLocaleString());
   APIservice.listCars().then(function (data) {
@@ -9895,15 +9926,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("availableCarsList").innerHTML = carListHTML;
   });
 });
-document.getElementById('button_login').addEventListener('click', function () {
-  var user = {
-    "username": document.getElementById('username').value,
-    "password": document.getElementById('password').value
-  };
-  APIservice.login(user).then(function (result) {
-    console.log(result);
-    token = result;
-  });
+document.getElementById('button_logout').addEventListener('click', function () {
+  myStorage.clear;
+  location.reload();
 });
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -9932,7 +9957,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40609" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34859" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
