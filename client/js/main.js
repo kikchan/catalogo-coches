@@ -3,6 +3,8 @@ import { compile } from 'handlebars';
 
 var APIservice = new Service_API('http://localhost:3000')
 
+var token
+
 //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
 //Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
@@ -53,7 +55,8 @@ document.getElementById('button_login').addEventListener('click', function() {
     "password": document.getElementById('password').value
   }
 
-  var token = APIservice.login(user).then(function() {
-    console.log("Logged")
+  APIservice.login(user).then(function(result) {
+    console.log(result)
+    token = result
   })
 })

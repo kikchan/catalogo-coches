@@ -10,9 +10,8 @@ export class Service_API {
                 'Content-type':'application/json'
             },
             body: JSON.stringify(user)
-        }).then(function(response) {
-            console.log(response)
-            //return response.json()
+        }).then(response=>response.text()).then(token=> {
+            return token
         })
     }
 

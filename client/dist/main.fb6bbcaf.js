@@ -137,7 +137,9 @@ function () {
         },
         body: JSON.stringify(user)
       }).then(function (response) {
-        console.log(response); //return response.json()
+        return response.text();
+      }).then(function (token) {
+        return token;
       });
     }
   }, {
@@ -9869,7 +9871,8 @@ var _Service_API = require("./services/Service_API.js");
 
 var _handlebars = require("handlebars");
 
-var APIservice = new _Service_API.Service_API('http://localhost:3000'); //Plantilla handlebars para renderizar en HTML un item de la lista
+var APIservice = new _Service_API.Service_API('http://localhost:3000');
+var token; //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
 //Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
 
@@ -9897,8 +9900,9 @@ document.getElementById('button_login').addEventListener('click', function () {
     "username": document.getElementById('username').value,
     "password": document.getElementById('password').value
   };
-  var token = APIservice.login(user).then(function () {
-    console.log("Logged");
+  APIservice.login(user).then(function (result) {
+    console.log(result);
+    token = result;
   });
 });
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -9928,7 +9932,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45839" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40609" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
