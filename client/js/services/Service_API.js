@@ -3,8 +3,20 @@ export class Service_API {
         this.API_URL = url
     }
 
+    login(user) {
+        return fetch(this.API_URL + '/login', {
+            method: 'POST',
+            headers: {
+                'Content-type':'application/json'
+            },
+            body: JSON.stringify(user)
+        }).then(function(response) {
+            return response.json()
+        })
+    }
+
     listCars() {
-        return fetch(this.API_URL)
+        return fetch(this.API_URL + '/cars')
         .then(function(response) {
             if(response.ok)
                 return response.json()

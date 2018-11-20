@@ -128,9 +128,22 @@ function () {
   }
 
   _createClass(Service_API, [{
+    key: "login",
+    value: function login(user) {
+      return fetch(this.API_URL + '/login', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      }).then(function (response) {
+        return response.json();
+      });
+    }
+  }, {
     key: "listCars",
     value: function listCars() {
-      return fetch(this.API_URL).then(function (response) {
+      return fetch(this.API_URL + '/cars').then(function (response) {
         if (response.ok) return response.json();
       });
     }
@@ -9856,7 +9869,7 @@ var _Service_API = require("./services/Service_API.js");
 
 var _handlebars = require("handlebars");
 
-var APIservice = new _Service_API.Service_API('http://localhost:3000/cars'); //Plantilla handlebars para renderizar en HTML un item de la lista
+var APIservice = new _Service_API.Service_API('http://localhost:3000'); //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
 //Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
 
@@ -9878,6 +9891,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var carListHTML = tmpl_carList_compiled(data);
     document.getElementById("availableCarsList").innerHTML = carListHTML;
   });
+});
+document.getElementById('button_login').addEventListener('click', function () {
+  var user = {};
+  user.username = document.getElementById('username').value;
+  user.password = document.getElementById('password').value;
+  var token = APIservice.login(user);
 });
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

@@ -1,7 +1,7 @@
 import { Service_API } from './services/Service_API.js'
 import { compile } from 'handlebars';
 
-var APIservice = new Service_API('http://localhost:3000/cars')
+var APIservice = new Service_API('http://localhost:3000')
 
 //Plantilla handlebars para renderizar en HTML un item de la lista
 //Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
@@ -45,4 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var carListHTML = tmpl_carList_compiled(data)
         document.getElementById("availableCarsList").innerHTML = carListHTML
     })
+})
+
+document.getElementById('button_login').addEventListener('click', function() {
+  var user = {}
+  
+  user.username = document.getElementById('username').value
+  user.password = document.getElementById('password').value
+
+  var token = APIservice.login(user)
 })
