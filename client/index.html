@@ -2,17 +2,19 @@
   <head>
     <title>Welcome</title>
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
+    <link rel="shortcut icon" href="public/favicon.ico" /> 
   </head>
   <body>
     <div class="title">Welcome to Kiril's car list!</div>
-    <div id="availableCarsList">
+    
+    <div class="container">
+      <div class="loginBox">
+        <h2>Login</h2>
 
-    </div>
-
-    <div class="formAddCar">
-      <form>
-        <legend>Add a new car</legend>
-      </form>
+        <input type="text" id="username" placeholder="Username"></br>
+        <input type="password" id="password" placeholder="Password"></br>
+        <input type="button" value="Login" id="button_login">
+      </div>
     </div>
     
     <script src="./js/main.js"></script>

@@ -8,6 +8,26 @@ body {
     background-image: url('../images/background.jpg');
 }
 
+.container {
+    text-align: center;
+    background: #005AA7;
+    background: -webkit-linear-gradient(to right, #FFFDE4, #005AA7);
+    background: linear-gradient(to right, #FFFDE4, #005AA7);
+    border: solid black 2px;
+    margin: 5em auto 0 auto;
+    padding: 5em;
+    width: 50%;
+}
+
+.loginBox {
+    margin: 0 auto 0 auto;
+    width: 50%;
+}
+
+.loginBox input[type="button"] {
+    margin-top: 2em;
+}
+
 .title {
     text-align: center;
     margin-top: 1em;

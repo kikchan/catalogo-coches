@@ -31,12 +31,4 @@ export class Service_API {
                 return respuesta.json()
         })
     }
-
-    isOK() {
-        return fetch(this.API_URL)
-        .then(function(response) {
-            console.log(JSON.parse(response.body))
-            return JSON.parse(response.body) != "" ? true : false
-        })
-    }
 }
