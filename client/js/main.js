@@ -48,10 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 document.getElementById('button_login').addEventListener('click', function() {
-  var user = {}
-  
-  user.username = document.getElementById('username').value
-  user.password = document.getElementById('password').value
+  var user = {
+    "username": document.getElementById('username').value,
+    "password": document.getElementById('password').value
+  }
 
-  var token = APIservice.login(user)
+  var token = APIservice.login(user).then(function() {
+    console.log("Logged")
+  })
 })

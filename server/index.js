@@ -150,6 +150,8 @@ app.put("/cars", function(req, res) {
 
 //API: login
 app.post("/login", function(req, res) {
+    console.log(req.body)
+    
     login(function(result){
         if(result == "Wrong username or password") res.status(403).send(result)
         else res.status(200).send(result)

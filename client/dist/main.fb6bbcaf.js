@@ -137,7 +137,7 @@ function () {
         },
         body: JSON.stringify(user)
       }).then(function (response) {
-        return response.json();
+        console.log(response); //return response.json()
       });
     }
   }, {
@@ -9893,10 +9893,13 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 document.getElementById('button_login').addEventListener('click', function () {
-  var user = {};
-  user.username = document.getElementById('username').value;
-  user.password = document.getElementById('password').value;
-  var token = APIservice.login(user);
+  var user = {
+    "username": document.getElementById('username').value,
+    "password": document.getElementById('password').value
+  };
+  var token = APIservice.login(user).then(function () {
+    console.log("Logged");
+  });
 });
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
