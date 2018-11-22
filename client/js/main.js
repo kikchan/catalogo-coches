@@ -10,7 +10,10 @@ var templateItem = `
    <tr>
       <td>{{maker}}</td>
       <td>{{model}}</td>
-      <td><a id="car_{{id}}" href="javascript:details({{id}})">Details</a></td>
+      <td>
+      <a class="car_details" href="javascript:details({{id}})">Details</a>
+      <a class="car_delete" href="javascript:deleteCar({{id}})">Delete</a>
+      </td>
    </tr>
 `
 var templateList = `
@@ -99,15 +102,19 @@ if(myStorage.loginStatus != "OK") {
   divLoginBox.style.display = "none"
 
   var logoutButton = document.getElementById('button_logout')
-  var username = tmpl_welcome_username_compiled(myStorage.username)
-  logoutButton.insertAdjacentHTML('beforebegin', username)
   logoutButton.style.display = "inline"
 
+  var welcomeUser = document.getElementById('welcomeUser')
+  welcomeUser.innerHTML = tmpl_welcome_username_compiled(myStorage.username)
+  welcomeUser.style.display = "inline"
+
   APIservice.listCars().then(function (data) {
-    var divAvailableCars = document.getElementById("availableCarsList")
-    divAvailableCars.innerHTML = tmpl_carList_compiled(data)
-    divAvailableCars.style.textAlign = "left"
-    divAvailableCars.style.display = "inline"
+    if(!isEmpty(data)) {
+      var divAvailableCars = document.getElementById("availableCarsList")
+      divAvailableCars.innerHTML = tmpl_carList_compiled(data)
+      divAvailableCars.style.textAlign = "left"
+      divAvailableCars.style.display = "inline"
+    } else window.alert("There are no cars in the catalogue :(")
   })
 }
 
@@ -127,3 +134,20 @@ function details(id) {
 
 //Its quite important to store the function into the actual window so the page can load it
 window.details = details
+
+function deleteCar(id) {
+  APIservice.deleteCar(id, myStorage.token).then(function () {
+    location.reload()
+  })
+}
+
+//Its quite important to store the function into the actual window so the page can load it
+window.deleteCar = deleteCar
+
+function isEmpty(obj) {
+  for(var key in obj) {
+      if(obj.hasOwnProperty(key))
+          return false;
+  }
+  return true;
+}

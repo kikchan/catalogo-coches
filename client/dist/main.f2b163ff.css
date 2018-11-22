@@ -125,10 +125,28 @@ td {
 	font-size: 15px;
 }
 
-.carTable td a {
-	color: green;
+.car_details {
+	color: white;
+	text-decoration: unset;
+}
+
+.car_details:hover {
+	text-decoration: underline;
+}
+
+.car_delete {
+	color: red;
+	text-decoration: unset;
+}
+
+.car_delete:hover {
+	text-decoration: underline;
 }
 
 .carDetails {
+	display: none;
+}
+
+.welcomeUser {
 	display: none;
 }

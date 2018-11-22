@@ -182,7 +182,7 @@ function listCarsRange(callback, limit, offset) {
 
 //List a car by its ID
 function listCarsByID(callback, id) {
-    knex.select().from('Cars').where('id', id)
+    knex.select().from('Cars').where('id', id).first()
     .then(function(data){
         console.log("Showing car with ID: " + id)
 

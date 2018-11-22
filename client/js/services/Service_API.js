@@ -26,7 +26,20 @@ export class Service_API {
     getCar(id) {
         return fetch(this.API_URL + '/cars/' + id)
         .then(response=>response.json()).then(car=> {
-            return car[0]
+            return car
+        })
+    }
+
+    deleteCar(id, token) {
+        return fetch(this.API_URL + '/cars/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-type':'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(function(response) {
+            if(response.ok)
+                return response
         })
     }
 
