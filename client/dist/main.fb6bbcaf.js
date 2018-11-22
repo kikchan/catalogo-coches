@@ -152,7 +152,7 @@ function () {
   }, {
     key: "getCar",
     value: function getCar(id) {
-      return fetch(this.API_URL + '/' + id).then(function (response) {
+      return fetch(this.API_URL + '/cars/:' + id).then(function (response) {
         if (response.ok) return response.json();
       });
     }
@@ -9874,23 +9874,12 @@ var _handlebars = require("handlebars");
 var APIservice = new _Service_API.Service_API('http://localhost:3000'); //var APIservice = new Service_API('http://185.207.145.237:3000')
 
 var myStorage = window.localStorage;
-var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td><a id=\"enlace_{{id}}\" href=\"javascript:verDetalles({{id}})\">Details</a></td>\n   </tr>\n";
-/*
-<span id="{{id}}">
-         <strong>{{maker}}</strong> <em>{{model}}</em>
-      </span>   
-      <a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a>
-*/
-
+var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td><a id=\"car_{{id}}\" href=\"javascript:details({{id}})\">Details</a></td>\n   </tr>\n";
 var templateList = "\n  <h2>Available cars in the catalogue</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Actions</th>\n      </tr>\n    </thead>\n    <tbody>\n      {{#.}}\n        ".concat(templateItem, "\n      {{/.}}\n    </tbody>\n  </table>\n");
-var templateDetails = "\n  <span id=\"details_{{id}}\">\n    {{details}}\n  </span>\n";
-var wrongUser = "\n  </br></br><strong class=\"wrongCredentials\">Wrong username or password!</strong>\n";
-var welcomeUser = "\n  Hello <strong>{{username}}</strong></br>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
+var welcomeUser = "\n  Hello <strong>{{this}}</strong></br>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 
 var tmpl_carList_compiled = (0, _handlebars.compile)(templateList);
 var tmpl_item_compiled = (0, _handlebars.compile)(templateItem);
-var tmpl_detalles_compiled = (0, _handlebars.compile)(templateDetails);
-var tmpl_wrong_username_compiled = (0, _handlebars.compile)(wrongUser);
 var tmpl_welcome_username_compiled = (0, _handlebars.compile)(welcomeUser);
 console.log("Page loaded @ " + new Date().toLocaleString());
 
@@ -9902,9 +9891,7 @@ if (myStorage.loginStatus != "OK") {
     };
     APIservice.login(user).then(function (result) {
       if (result == "Wrong username or password") {
-        console.log("Wrong username or password");
-        var loginButton = document.getElementById('button_login');
-        loginButton.insertAdjacentHTML("afterend", wrongUser);
+        window.alert(result);
       } else {
         myStorage.loginStatus = "OK";
         myStorage.username = user.username;
@@ -9935,6 +9922,25 @@ document.getElementById('button_logout').addEventListener('click', function () {
   myStorage.clear();
   location.reload();
 });
+
+function details(id) {
+  APIservice.getCar(id).then(function (car) {
+    var car = {
+      id: car.id,
+      maker: car.maker,
+      model: car.model,
+      year: car.year,
+      country: car.country,
+      mileage: car.mileage,
+      available: car.available,
+      price: car.price
+    };
+    console.log(car);
+  });
+} //Its quite important to store the function into the actual window so the page can load it
+
+
+window.details = details;
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -9962,7 +9968,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37449" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39181" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

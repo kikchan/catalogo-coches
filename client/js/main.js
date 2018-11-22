@@ -10,17 +10,9 @@ var templateItem = `
    <tr>
       <td>{{maker}}</td>
       <td>{{model}}</td>
-      <td><a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a></td>
+      <td><a id="car_{{id}}" href="javascript:details({{id}})">Details</a></td>
    </tr>
 `
-
-/*
-<span id="{{id}}">
-         <strong>{{maker}}</strong> <em>{{model}}</em>
-      </span>   
-      <a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a>
-*/
-
 var templateList = `
   <h2>Available cars in the catalogue</h2>
   <table class="carTable">
@@ -39,26 +31,14 @@ var templateList = `
   </table>
 `
 
-var templateDetails = `
-  <span id="details_{{id}}">
-    {{details}}
-  </span>
-`
-
-var wrongUser = `
-  </br></br><strong class="wrongCredentials">Wrong username or password!</strong>
-`
-
 var welcomeUser = `
-  Hello <strong>{{username}}</strong></br>
+  Hello <strong>{{this}}</strong></br>
 `
 
 
 //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 var tmpl_carList_compiled = compile(templateList)
 var tmpl_item_compiled = compile(templateItem)
-var tmpl_detalles_compiled = compile(templateDetails)
-var tmpl_wrong_username_compiled = compile(wrongUser)
 var tmpl_welcome_username_compiled = compile(welcomeUser)
 
 console.log("Page loaded @ " + new Date().toLocaleString())
@@ -71,11 +51,8 @@ if(myStorage.loginStatus != "OK") {
     }
 
     APIservice.login(user).then(function (result) {
-      if (result == "Wrong username or password") {
-        console.log("Wrong username or password")
-        
-        var loginButton = document.getElementById('button_login')
-        loginButton.insertAdjacentHTML("afterend", wrongUser)
+      if (result == "Wrong username or password") {    
+        window.alert(result)
       } else {
         myStorage.loginStatus = "OK"
         myStorage.username = user.username
@@ -109,3 +86,23 @@ document.getElementById('button_logout').addEventListener('click', function () {
   myStorage.clear()
   location.reload()
 })
+
+function details(id) {
+  APIservice.getCar(id).then(function (car) {
+    var car = {
+      id: car.id, 
+      maker: car.maker,
+      model: car.model,
+      year: car.year,
+      country: car.country,
+      mileage: car.mileage,
+      available: car.available,
+      price: car.price
+    }
+
+    console.log(car)
+  })
+}
+
+//Its quite important to store the function into the actual window so the page can load it
+window.details = details

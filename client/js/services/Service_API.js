@@ -24,7 +24,7 @@ export class Service_API {
     }
 
     getCar(id) {
-        return fetch(this.API_URL + '/' + id)
+        return fetch(this.API_URL + '/cars/:' + id)
         .then(function(response) {
             if (response.ok)
                 return response.json()

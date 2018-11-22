@@ -25,6 +25,10 @@ body {
     width: 50%;
 }
 
+.loginBox h2 {
+	color: brown;
+}
+
 .loginBox input[type="button"] {
     margin-top: 2em;
 }
@@ -33,17 +37,6 @@ body {
     position: fixed;
     top: 12em;
     right: 22%;
-}
-
-@keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-}
-
-.wrongCredentials {
-    color: red;
-    animation: blinker 1s linear infinite;
 }
 
 .title {
@@ -130,4 +123,8 @@ body {
 .carTable td {
 	text-align: center;
 	font-size: 15px;
+}
+
+.carTable td a {
+	color: green;
 }
