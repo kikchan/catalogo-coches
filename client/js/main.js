@@ -63,45 +63,49 @@ var tmpl_welcome_username_compiled = compile(welcomeUser)
 
 console.log("Page loaded @ " + new Date().toLocaleString())
 
-document.getElementById('button_login').addEventListener('click', function () {
-  var user = {
-    "username": document.getElementById('username').value,
-    "password": document.getElementById('password').value
-  }
-
-  APIservice.login(user).then(function (result) {
-    if (result == "Wrong username or password") {
-      console.log("Wrong username or password")
-      
-      var loginButton = document.getElementById('button_login')
-      loginButton.insertAdjacentHTML("afterend", wrongUser)
-    } else {
-      myStorage.username = user.username
-      myStorage.token = result
-
-      var divContainer = document.getElementById('container')
-      divContainer.style.background = "black"
-      divContainer.style.opacity = 0.8
-
-      var divLoginBox = document.getElementById("loginBox")
-      divLoginBox.style.display = "none"
-
-      var logoutButton = document.getElementById('button_logout')
-      var username = tmpl_welcome_username_compiled(user)
-      logoutButton.insertAdjacentHTML('beforebegin', username)
-      logoutButton.style.display = "inline"
-
-      APIservice.listCars().then(function (data) {
-        var divAvailableCars = document.getElementById("availableCarsList")
-        divAvailableCars.innerHTML = tmpl_carList_compiled(data)
-        divAvailableCars.style.textAlign = "left"
-        divAvailableCars.style.display = "inline"
-      })
+if(myStorage.loginStatus != "OK") {
+  document.getElementById('button_login').addEventListener('click', function () {
+    var user = {
+      "username": document.getElementById('username').value,
+      "password": document.getElementById('password').value
     }
+
+    APIservice.login(user).then(function (result) {
+      if (result == "Wrong username or password") {
+        console.log("Wrong username or password")
+        
+        var loginButton = document.getElementById('button_login')
+        loginButton.insertAdjacentHTML("afterend", wrongUser)
+      } else {
+        myStorage.loginStatus = "OK"
+        myStorage.username = user.username
+        myStorage.token = result
+        location.reload()
+      }
+    })
   })
-})
+} else {
+  var divContainer = document.getElementById('container')
+  divContainer.style.background = "black"
+  divContainer.style.opacity = 0.8
+
+  var divLoginBox = document.getElementById("loginBox")
+  divLoginBox.style.display = "none"
+
+  var logoutButton = document.getElementById('button_logout')
+  var username = tmpl_welcome_username_compiled(myStorage.username)
+  logoutButton.insertAdjacentHTML('beforebegin', username)
+  logoutButton.style.display = "inline"
+
+  APIservice.listCars().then(function (data) {
+    var divAvailableCars = document.getElementById("availableCarsList")
+    divAvailableCars.innerHTML = tmpl_carList_compiled(data)
+    divAvailableCars.style.textAlign = "left"
+    divAvailableCars.style.display = "inline"
+  })
+}
 
 document.getElementById('button_logout').addEventListener('click', function () {
-  myStorage.clear
+  myStorage.clear()
   location.reload()
 })
