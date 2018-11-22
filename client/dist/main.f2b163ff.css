@@ -99,7 +99,6 @@ body {
 }
 
 .button_logout:active {
-	position:relative;
 	top:1px;
 }
 
@@ -108,7 +107,7 @@ body {
 	color: white;
 }
 
-.availableCarsList h2 {
+h2 {
 	border-bottom: solid white 1px;
 }
 
@@ -120,11 +119,16 @@ body {
 	font-weight: bold;
 }
 
-.carTable td {
+td {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	text-align: center;
 	font-size: 15px;
 }
 
 .carTable td a {
 	color: green;
+}
+
+.carDetails {
+	display: none;
 }

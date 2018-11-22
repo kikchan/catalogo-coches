@@ -152,8 +152,10 @@ function () {
   }, {
     key: "getCar",
     value: function getCar(id) {
-      return fetch(this.API_URL + '/cars/:' + id).then(function (response) {
-        if (response.ok) return response.json();
+      return fetch(this.API_URL + '/cars/' + id).then(function (response) {
+        return response.json();
+      }).then(function (car) {
+        return car[0];
       });
     }
   }, {
@@ -165,8 +167,8 @@ function () {
           'Content-type': 'application/json'
         },
         body: JSON.stringify(car)
-      }).then(function (respuesta) {
-        if (respuesta.ok) return respuesta.json();
+      }).then(function (response) {
+        if (response.ok) return response.json();
       });
     }
   }]);
@@ -9876,10 +9878,12 @@ var APIservice = new _Service_API.Service_API('http://localhost:3000'); //var AP
 var myStorage = window.localStorage;
 var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td><a id=\"car_{{id}}\" href=\"javascript:details({{id}})\">Details</a></td>\n   </tr>\n";
 var templateList = "\n  <h2>Available cars in the catalogue</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Actions</th>\n      </tr>\n    </thead>\n    <tbody>\n      {{#.}}\n        ".concat(templateItem, "\n      {{/.}}\n    </tbody>\n  </table>\n");
-var welcomeUser = "\n  Hello <strong>{{this}}</strong></br>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
+var welcomeUser = "\n  Hello <strong>{{this}}</strong></br>\n";
+var carDetails = "\n  <h2>Car details</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Year</th>\n        <th scope=\"col\">Country</th>\n        <th scope=\"col\">Mileage</th>\n        <th scope=\"col\">Available</th>\n        <th scope=\"col\">Price</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>{{maker}}</td>\n        <td>{{model}}</td>\n        <td>{{year}}</td>\n        <td>{{country}}</td>\n        <td>{{mileage}} km</td>\n        <td>{{available}}</td>\n        <td>{{price}} \u20AC</td>\n      </tr>\n    </tbody>\n  </table>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 
 var tmpl_carList_compiled = (0, _handlebars.compile)(templateList);
 var tmpl_item_compiled = (0, _handlebars.compile)(templateItem);
+var tmpl_carDetails_compiled = (0, _handlebars.compile)(carDetails);
 var tmpl_welcome_username_compiled = (0, _handlebars.compile)(welcomeUser);
 console.log("Page loaded @ " + new Date().toLocaleString());
 
@@ -9924,18 +9928,11 @@ document.getElementById('button_logout').addEventListener('click', function () {
 });
 
 function details(id) {
-  APIservice.getCar(id).then(function (car) {
-    var car = {
-      id: car.id,
-      maker: car.maker,
-      model: car.model,
-      year: car.year,
-      country: car.country,
-      mileage: car.mileage,
-      available: car.available,
-      price: car.price
-    };
-    console.log(car);
+  APIservice.getCar(id).then(function (data) {
+    var divCarDetails = document.getElementById("carDetails");
+    divCarDetails.innerHTML = tmpl_carDetails_compiled(data);
+    divCarDetails.style.textAlign = "left";
+    divCarDetails.style.display = "inline";
   });
 } //Its quite important to store the function into the actual window so the page can load it
 
@@ -9968,7 +9965,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39181" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38167" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

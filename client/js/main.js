@@ -35,10 +35,39 @@ var welcomeUser = `
   Hello <strong>{{this}}</strong></br>
 `
 
+var carDetails = `
+  <h2>Car details</h2>
+  <table class="carTable">
+    <thead>
+      <tr>
+        <th scope="col">Maker</th>
+        <th scope="col">Model</th>
+        <th scope="col">Year</th>
+        <th scope="col">Country</th>
+        <th scope="col">Mileage</th>
+        <th scope="col">Available</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{maker}}</td>
+        <td>{{model}}</td>
+        <td>{{year}}</td>
+        <td>{{country}}</td>
+        <td>{{mileage}} km</td>
+        <td>{{available}}</td>
+        <td>{{price}} €</td>
+      </tr>
+    </tbody>
+  </table>
+`
+
 
 //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 var tmpl_carList_compiled = compile(templateList)
 var tmpl_item_compiled = compile(templateItem)
+var tmpl_carDetails_compiled = compile(carDetails)
 var tmpl_welcome_username_compiled = compile(welcomeUser)
 
 console.log("Page loaded @ " + new Date().toLocaleString())
@@ -88,19 +117,11 @@ document.getElementById('button_logout').addEventListener('click', function () {
 })
 
 function details(id) {
-  APIservice.getCar(id).then(function (car) {
-    var car = {
-      id: car.id, 
-      maker: car.maker,
-      model: car.model,
-      year: car.year,
-      country: car.country,
-      mileage: car.mileage,
-      available: car.available,
-      price: car.price
-    }
-
-    console.log(car)
+  APIservice.getCar(id).then(function (data) {
+    var divCarDetails = document.getElementById("carDetails")
+    divCarDetails.innerHTML = tmpl_carDetails_compiled(data)
+    divCarDetails.style.textAlign = "left"
+    divCarDetails.style.display = "inline"
   })
 }
 

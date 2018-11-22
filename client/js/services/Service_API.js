@@ -24,10 +24,9 @@ export class Service_API {
     }
 
     getCar(id) {
-        return fetch(this.API_URL + '/cars/:' + id)
-        .then(function(response) {
-            if (response.ok)
-                return response.json()
+        return fetch(this.API_URL + '/cars/' + id)
+        .then(response=>response.json()).then(car=> {
+            return car[0]
         })
     }
 
@@ -38,9 +37,9 @@ export class Service_API {
                 'Content-type':'application/json'
             },
             body: JSON.stringify(car)
-        }).then(function (respuesta) {
-            if (respuesta.ok)
-                return respuesta.json()
+        }).then(function (response) {
+            if (response.ok)
+                return response.json()
         })
     }
 }
