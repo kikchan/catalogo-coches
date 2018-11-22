@@ -2,31 +2,41 @@ import { Service_API } from './services/Service_API.js'
 import { compile } from 'handlebars';
 
 var APIservice = new Service_API('http://localhost:3000')
+//var APIservice = new Service_API('http://185.207.145.237:3000')
 
 var myStorage = window.localStorage
 
-//Plantilla handlebars para renderizar en HTML un item de la lista
-//Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
-//Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
 var templateItem = `
-   <div>
-      <span id="{{id}}">
+   <tr>
+      <td>{{maker}}</td>
+      <td>{{model}}</td>
+      <td><a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a></td>
+   </tr>
+`
+
+/*
+<span id="{{id}}">
          <strong>{{maker}}</strong> <em>{{model}}</em>
       </span>   
       <a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a>
-   </div>
-`
+*/
 
-//Plantilla Handlebars para renderizar en HTML la lista de la compra
-//1. El "." significa el objeto del nivel "actual", en nuestro caso es el array
-//por el que vamos a iterar con handlebars
-//2. El ${} nos permite interpolar variables (funcionalidad de ES6). Es solo por no
-//andar concatenando cadenas, esto queda más elegante
 var templateList = `
- <h2>Car list</h2>
- {{#.}}
-   ${templateItem}
- {{/.}}
+  <h2>Available cars in the catalogue</h2>
+  <table class="carTable">
+    <thead>
+      <tr>
+        <th scope="col">Maker</th>
+        <th scope="col">Model</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#.}}
+        ${templateItem}
+      {{/.}}
+    </tbody>
+  </table>
 `
 
 var templateDetails = `
@@ -43,12 +53,15 @@ var welcomeUser = `
   Hello <strong>{{username}}</strong></br>
 `
 
+
 //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 var tmpl_carList_compiled = compile(templateList)
 var tmpl_item_compiled = compile(templateItem)
 var tmpl_detalles_compiled = compile(templateDetails)
 var tmpl_wrong_username_compiled = compile(wrongUser)
 var tmpl_welcome_username_compiled = compile(welcomeUser)
+
+console.log("Page loaded @ " + new Date().toLocaleString())
 
 document.getElementById('button_login').addEventListener('click', function () {
   var user = {
@@ -73,23 +86,18 @@ document.getElementById('button_login').addEventListener('click', function () {
       var divLoginBox = document.getElementById("loginBox")
       divLoginBox.style.display = "none"
 
-      var divAvailableCars = document.getElementById("availableCarsList")
-      divAvailableCars.style.display = "inline"
-
       var logoutButton = document.getElementById('button_logout')
       var username = tmpl_welcome_username_compiled(user)
       logoutButton.insertAdjacentHTML('beforebegin', username)
       logoutButton.style.display = "inline"
+
+      APIservice.listCars().then(function (data) {
+        var divAvailableCars = document.getElementById("availableCarsList")
+        divAvailableCars.innerHTML = tmpl_carList_compiled(data)
+        divAvailableCars.style.textAlign = "left"
+        divAvailableCars.style.display = "inline"
+      })
     }
-  })
-})
-
-document.addEventListener('DOMContentLoaded', function () {
-  console.log("Page loaded @ " + new Date().toLocaleString())
-
-  APIservice.listCars().then(function (data) {
-    var carListHTML = tmpl_carList_compiled(data)
-    document.getElementById("availableCarsList").innerHTML = carListHTML
   })
 })
 

@@ -9871,18 +9871,18 @@ var _Service_API = require("./services/Service_API.js");
 
 var _handlebars = require("handlebars");
 
-var APIservice = new _Service_API.Service_API('http://localhost:3000');
-var myStorage = window.localStorage; //Plantilla handlebars para renderizar en HTML un item de la lista
-//Usamos backticks (funcionalidad de ES6) para delimitar la cadena para que pueda ser multilínea
-//Con el "javascript:" en el href conseguimos que un enlace pueda llamar a código JS
+var APIservice = new _Service_API.Service_API('http://localhost:3000'); //var APIservice = new Service_API('http://185.207.145.237:3000')
 
-var templateItem = "\n   <div>\n      <span id=\"{{id}}\">\n         <strong>{{maker}}</strong> <em>{{model}}</em>\n      </span>   \n      <a id=\"enlace_{{id}}\" href=\"javascript:verDetalles({{id}})\">Details</a>\n   </div>\n"; //Plantilla Handlebars para renderizar en HTML la lista de la compra
-//1. El "." significa el objeto del nivel "actual", en nuestro caso es el array
-//por el que vamos a iterar con handlebars
-//2. El ${} nos permite interpolar variables (funcionalidad de ES6). Es solo por no
-//andar concatenando cadenas, esto queda más elegante
+var myStorage = window.localStorage;
+var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td><a id=\"enlace_{{id}}\" href=\"javascript:verDetalles({{id}})\">Details</a></td>\n   </tr>\n";
+/*
+<span id="{{id}}">
+         <strong>{{maker}}</strong> <em>{{model}}</em>
+      </span>   
+      <a id="enlace_{{id}}" href="javascript:verDetalles({{id}})">Details</a>
+*/
 
-var templateList = "\n <h2>Car list</h2>\n {{#.}}\n   ".concat(templateItem, "\n {{/.}}\n");
+var templateList = "\n  <h2>Available cars in the catalogue</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Actions</th>\n      </tr>\n    </thead>\n    <tbody>\n      {{#.}}\n        ".concat(templateItem, "\n      {{/.}}\n    </tbody>\n  </table>\n");
 var templateDetails = "\n  <span id=\"details_{{id}}\">\n    {{details}}\n  </span>\n";
 var wrongUser = "\n  </br></br><strong class=\"wrongCredentials\">Wrong username or password!</strong>\n";
 var welcomeUser = "\n  Hello <strong>{{username}}</strong></br>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
@@ -9892,6 +9892,7 @@ var tmpl_item_compiled = (0, _handlebars.compile)(templateItem);
 var tmpl_detalles_compiled = (0, _handlebars.compile)(templateDetails);
 var tmpl_wrong_username_compiled = (0, _handlebars.compile)(wrongUser);
 var tmpl_welcome_username_compiled = (0, _handlebars.compile)(welcomeUser);
+console.log("Page loaded @ " + new Date().toLocaleString());
 document.getElementById('button_login').addEventListener('click', function () {
   var user = {
     "username": document.getElementById('username').value,
@@ -9910,20 +9911,17 @@ document.getElementById('button_login').addEventListener('click', function () {
       divContainer.style.opacity = 0.8;
       var divLoginBox = document.getElementById("loginBox");
       divLoginBox.style.display = "none";
-      var divAvailableCars = document.getElementById("availableCarsList");
-      divAvailableCars.style.display = "inline";
       var logoutButton = document.getElementById('button_logout');
       var username = tmpl_welcome_username_compiled(user);
       logoutButton.insertAdjacentHTML('beforebegin', username);
       logoutButton.style.display = "inline";
+      APIservice.listCars().then(function (data) {
+        var divAvailableCars = document.getElementById("availableCarsList");
+        divAvailableCars.innerHTML = tmpl_carList_compiled(data);
+        divAvailableCars.style.textAlign = "left";
+        divAvailableCars.style.display = "inline";
+      });
     }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  console.log("Page loaded @ " + new Date().toLocaleString());
-  APIservice.listCars().then(function (data) {
-    var carListHTML = tmpl_carList_compiled(data);
-    document.getElementById("availableCarsList").innerHTML = carListHTML;
   });
 });
 document.getElementById('button_logout').addEventListener('click', function () {
@@ -9957,7 +9955,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34859" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37449" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
