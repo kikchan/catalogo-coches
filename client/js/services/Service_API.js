@@ -43,11 +43,26 @@ export class Service_API {
         })
     }
 
-    addCar(car) {
-        return fetch(this.API_URL, {
+    addCar(car, token) {
+        return fetch(this.API_URL + '/cars', {
             method: 'POST',
             headers: {
-                'Content-type':'application/json'
+                'Content-type':'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(car)
+        }).then(function (response) {
+            if (response.ok)
+                return response.json()
+        })
+    }
+
+    editCar(car, token) {
+        return fetch(this.API_URL + '/cars', {
+            method: 'PUT',
+            headers: {
+                'Content-type':'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(car)
         }).then(function (response) {

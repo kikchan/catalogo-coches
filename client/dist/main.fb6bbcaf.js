@@ -173,11 +173,26 @@ function () {
     }
   }, {
     key: "addCar",
-    value: function addCar(car) {
-      return fetch(this.API_URL, {
+    value: function addCar(car, token) {
+      return fetch(this.API_URL + '/cars', {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Authorization': "Bearer ".concat(token)
+        },
+        body: JSON.stringify(car)
+      }).then(function (response) {
+        if (response.ok) return response.json();
+      });
+    }
+  }, {
+    key: "editCar",
+    value: function editCar(car, token) {
+      return fetch(this.API_URL + '/cars', {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': "Bearer ".concat(token)
         },
         body: JSON.stringify(car)
       }).then(function (response) {
@@ -9889,9 +9904,10 @@ var _handlebars = require("handlebars");
 var APIservice = new _Service_API.Service_API('http://localhost:3000'); //var APIservice = new Service_API('http://185.207.145.237:3000')
 
 var myStorage = window.localStorage;
-var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td>\n      <a class=\"car_details\" href=\"javascript:details({{id}})\">Details</a>\n      <a class=\"car_delete\" href=\"javascript:deleteCar({{id}})\">Delete</a>\n      </td>\n   </tr>\n";
+myStorage.carIDtoEdit = -1;
+var templateItem = "\n   <tr>\n      <td>{{maker}}</td>\n      <td>{{model}}</td>\n      <td>\n      <a class=\"car_details\" href=\"javascript:details({{id}})\">Details</a>\n      <a class=\"car_edit\" href=\"javascript:editCar({{id}})\">Edit</a>\n      <a class=\"car_delete\" href=\"javascript:deleteCar({{id}})\">Delete</a>\n      </td>\n   </tr>\n";
 var templateList = "\n  <h2>Available cars in the catalogue</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Actions</th>\n      </tr>\n    </thead>\n    <tbody>\n      {{#.}}\n        ".concat(templateItem, "\n      {{/.}}\n    </tbody>\n  </table>\n");
-var welcomeUser = "\n  Hello <strong>{{this}}</strong></br>\n";
+var welcomeUser = "\n  <label style=\"text-align: left\">Hello <strong>{{this}}&nbsp;</strong><label>\n";
 var carDetails = "\n  <h2>Car details</h2>\n  <table class=\"carTable\">\n    <thead>\n      <tr>\n        <th scope=\"col\">Maker</th>\n        <th scope=\"col\">Model</th>\n        <th scope=\"col\">Year</th>\n        <th scope=\"col\">Country</th>\n        <th scope=\"col\">Mileage</th>\n        <th scope=\"col\">Available</th>\n        <th scope=\"col\">Price</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>{{maker}}</td>\n        <td>{{model}}</td>\n        <td>{{year}}</td>\n        <td>{{country}}</td>\n        <td>{{mileage}} km</td>\n        <td>{{available}}</td>\n        <td>{{price}} \u20AC</td>\n      </tr>\n    </tbody>\n  </table>\n"; //Compilamos las plantillas handlebars. Esto genera funciones a las que llamaremos luego
 
 var tmpl_carList_compiled = (0, _handlebars.compile)(templateList);
@@ -9936,6 +9952,9 @@ if (myStorage.loginStatus != "OK") {
       divAvailableCars.style.display = "inline";
     } else window.alert("There are no cars in the catalogue :(");
   });
+  var divAddCar = document.getElementById('addModCar');
+  divAddCar.style.textAlign = "left";
+  divAddCar.style.display = "inline";
 }
 
 document.getElementById('button_logout').addEventListener('click', function () {
@@ -9959,7 +9978,7 @@ function deleteCar(id) {
   APIservice.deleteCar(id, myStorage.token).then(function () {
     location.reload();
   });
-} //Its quite important to store the function into the actual window so the page can load it
+} //Same story on this one
 
 
 window.deleteCar = deleteCar;
@@ -9971,6 +9990,54 @@ function isEmpty(obj) {
 
   return true;
 }
+
+function editCar(id) {
+  APIservice.getCar(id).then(function (car) {
+    document.getElementById('maker').value = car.maker;
+    document.getElementById('model').value = car.model;
+    document.getElementById('year').value = car.year;
+    document.getElementById('country').value = car.country;
+    document.getElementById('mileage').value = car.mileage;
+    document.getElementById('available').value = car.available;
+    document.getElementById('price').value = car.price;
+  });
+  myStorage.carIDtoEdit = id;
+} //Same story on this one
+
+
+window.editCar = editCar;
+document.getElementById('button_ok').addEventListener('click', function () {
+  console.log(myStorage.carIDtoEdit);
+  var car = {
+    maker: document.getElementById('maker').value,
+    model: document.getElementById('model').value,
+    year: document.getElementById('year').value,
+    country: document.getElementById('country').value,
+    mileage: document.getElementById('mileage').value,
+    available: document.getElementById('available').value,
+    price: document.getElementById('price').value
+  };
+
+  if (myStorage.carIDtoEdit >= 0) {
+    car.id = myStorage.carIDtoEdit;
+    APIservice.editCar(car, myStorage.token).then(function () {
+      console.log("edit");
+      myStorage.carIDtoEdit = -1;
+    });
+  } else APIservice.addCar(car, myStorage.token).then(function () {
+    console.log("add");
+    myStorage.carIDtoEdit = -1;
+  });
+
+  document.getElementById('maker').value = "";
+  document.getElementById('model').value = "";
+  document.getElementById('year').value = "";
+  document.getElementById('country').value = "";
+  document.getElementById('mileage').value = "";
+  document.getElementById('available').value = "";
+  document.getElementById('price').value = "";
+  location.reload();
+});
 },{"./services/Service_API.js":"js/services/Service_API.js","handlebars":"node_modules/handlebars/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -9998,7 +10065,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38301" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37313" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

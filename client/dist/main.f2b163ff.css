@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: url('background.a7e5beea.jpg');
+	background: url('background.a7e5beea.jpg') no-repeat;
 }
 
 .container {
@@ -14,8 +14,8 @@ body {
     background-position: center 60%;
     background-size: 100%;
     border: solid black 4px;
-    margin: 5em auto 0 auto;
-    padding: 4em;
+    margin: 2em auto 0 auto;
+    padding: 4em 4em 2em 4em;
     width: 50%;
     color: white;
 }
@@ -25,8 +25,9 @@ body {
     width: 50%;
 }
 
-.loginBox h2 {
+div.container div.loginBox h2 {
 	color: brown;
+	border: none;
 }
 
 .loginBox input[type="button"] {
@@ -34,9 +35,8 @@ body {
 }
 
 .logoutBox {
-    position: fixed;
-    top: 12em;
-    right: 22%;
+	margin: -5% auto 4% auto;
+	text-align: right;
 }
 
 .title {
@@ -57,49 +57,48 @@ body {
 
 .button_login {
 	background-color:#456ac7;
-	-moz-border-radius:28px;
-	-webkit-border-radius:28px;
-	border-radius:28px;
-	border:1px solid #9198ba;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:17px;
-	padding:10px 30px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #0b0747;
+	-moz-border-radius: 28px;
+	-webkit-border-radius: 28px;
+	border-radius: 28px;
+	border: 3px solid white;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 17px;
+	padding: 6px 30px;
+	text-decoration: none;
+	font-weight: bold;
 }
+
 .button_login:hover {
-	background-color:#332abd;
-}
-.button_login:active {
-	position:relative;
-	top:1px;
+	background-color:white;
+	color: #456ac7;
+	font-weight: bold;
+	border: 3px solid #456ac7;
 }
 
 .button_logout {
     display: none;
-	background-color:#ff0000;
-	-moz-border-radius:28px;
-	-webkit-border-radius:28px;
-	border-radius:28px;
-	border:1px solid #ff0000;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:17px;
-	padding:10px 30px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #cf0d0d;
+	background-color: #ff0000;
+	-moz-border-radius: 28px;
+	-webkit-border-radius: 28px;
+	border-radius: 28px;
+	border: 3px solid white;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 17px;
+	padding: 6px 30px;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 .button_logout:hover {
-	background-color:#b11212;
-}
-
-.button_logout:active {
-	top:1px;
+	background-color:white;
+	color: #ff0000;
+	font-weight: bold;
+	border: 3px solid #ff0000;
 }
 
 .carTable {
@@ -143,10 +142,56 @@ td {
 	text-decoration: underline;
 }
 
+.car_edit {
+	color: green;
+	text-decoration: unset;
+}
+
+.car_edit:hover {
+	text-decoration: underline;
+}
+
 .carDetails {
 	display: none;
 }
 
 .welcomeUser {
 	display: none;
+}
+
+.addModCar {
+	display: none;
+}
+
+div.formCar {
+	text-align: center;
+}
+
+div.formCar input {
+	text-align: left;
+	margin-bottom: 0.5%;
+}
+
+.button_ok {
+	margin-top: 1em;
+	background-color: green;
+	-moz-border-radius: 28px;
+	-webkit-border-radius: 28px;
+	border-radius: 28px;
+	border: 3px solid white;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 17px;
+	padding: 6px 40px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.button_ok:hover {
+	background-color:white;
+	color: green;
+	font-weight: bold;
+	border: 3px solid green;
 }

@@ -5,6 +5,7 @@ var APIservice = new Service_API('http://localhost:3000')
 //var APIservice = new Service_API('http://185.207.145.237:3000')
 
 var myStorage = window.localStorage
+myStorage.carIDtoEdit = -1
 
 var templateItem = `
    <tr>
@@ -12,6 +13,7 @@ var templateItem = `
       <td>{{model}}</td>
       <td>
       <a class="car_details" href="javascript:details({{id}})">Details</a>
+      <a class="car_edit" href="javascript:editCar({{id}})">Edit</a>
       <a class="car_delete" href="javascript:deleteCar({{id}})">Delete</a>
       </td>
    </tr>
@@ -35,7 +37,7 @@ var templateList = `
 `
 
 var welcomeUser = `
-  Hello <strong>{{this}}</strong></br>
+  <label style="text-align: left">Hello <strong>{{this}}&nbsp;</strong><label>
 `
 
 var carDetails = `
@@ -93,7 +95,7 @@ if(myStorage.loginStatus != "OK") {
       }
     })
   })
-} else {
+} else {  
   var divContainer = document.getElementById('container')
   divContainer.style.background = "black"
   divContainer.style.opacity = 0.8
@@ -116,6 +118,10 @@ if(myStorage.loginStatus != "OK") {
       divAvailableCars.style.display = "inline"
     } else window.alert("There are no cars in the catalogue :(")
   })
+
+  var divAddCar = document.getElementById('addModCar')
+  divAddCar.style.textAlign = "left"
+  divAddCar.style.display = "inline"
 }
 
 document.getElementById('button_logout').addEventListener('click', function () {
@@ -141,7 +147,7 @@ function deleteCar(id) {
   })
 }
 
-//Its quite important to store the function into the actual window so the page can load it
+//Same story on this one
 window.deleteCar = deleteCar
 
 function isEmpty(obj) {
@@ -151,3 +157,56 @@ function isEmpty(obj) {
   }
   return true;
 }
+
+function editCar(id) {
+  APIservice.getCar(id).then(function (car) {
+    document.getElementById('maker').value = car.maker
+    document.getElementById('model').value = car.model
+    document.getElementById('year').value = car.year
+    document.getElementById('country').value = car.country
+    document.getElementById('mileage').value = car.mileage
+    document.getElementById('available').value = car.available
+    document.getElementById('price').value = car.price
+  })
+
+  myStorage.carIDtoEdit = id
+}
+
+//Same story on this one
+window.editCar = editCar
+
+document.getElementById('button_ok').addEventListener('click', function () {
+  console.log(myStorage.carIDtoEdit)
+
+  var car = {
+    maker: document.getElementById('maker').value,
+    model: document.getElementById('model').value,
+    year: document.getElementById('year').value,
+    country: document.getElementById('country').value,
+    mileage: document.getElementById('mileage').value,
+    available: document.getElementById('available').value,
+    price: document.getElementById('price').value
+  }
+
+  if(myStorage.carIDtoEdit >= 0) {
+    car.id = myStorage.carIDtoEdit
+
+    APIservice.editCar(car, myStorage.token).then(function () {
+      console.log("edit")
+      myStorage.carIDtoEdit = -1
+    })
+  } else APIservice.addCar(car, myStorage.token).then(function () {
+    console.log("add")
+    myStorage.carIDtoEdit = -1
+  })
+
+  document.getElementById('maker').value = ""
+  document.getElementById('model').value = ""
+  document.getElementById('year').value = ""
+  document.getElementById('country').value = ""
+  document.getElementById('mileage').value = ""
+  document.getElementById('available').value = ""
+  document.getElementById('price').value = ""
+  
+  location.reload()
+})
