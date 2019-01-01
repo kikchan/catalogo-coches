@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="title">Welcome to Kiril's car list!</div>
-    <Main msg="Main"/>
+    <Main msg="Login"/>
   </div>
 </template>
 
@@ -29,5 +29,51 @@
     font-size: 40px;
     font-weight: bold;
     font-family: 'TheBlacklist' !important;
+  }
+
+  .carTable {
+    width: 100%;
+    color: white;
+  }
+
+  .carTable thead {
+    text-decoration: underline;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  td {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .car_details {
+    color: white;
+    text-decoration: unset;
+  }
+
+  .car_details:hover {
+    text-decoration: underline;
+  }
+
+  .car_delete {
+    color: red;
+    text-decoration: unset;
+  }
+
+  .car_delete:hover {
+    text-decoration: underline;
+  }
+
+  .car_edit {
+    color: green;
+    text-decoration: unset;
+  }
+
+  .car_edit:hover {
+    text-decoration: underline;
   }
 </style>
