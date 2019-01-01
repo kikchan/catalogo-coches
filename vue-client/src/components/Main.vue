@@ -4,18 +4,51 @@
       <h2>{{ msg }}</h2>
       <input type="text" id="username" placeholder="Username"/><br>
       <input type="password" id="password" placeholder="Password"/><br>
-      <input type="button" value="Login" class="button_login" id="button_login"/>
+      <input type="button" value="Login" class="button_login" @click="login"/>
     </div>
   </div>
 </template>
+<script>
+  import { Service_API } from '../../public/js/services/Service_API.js'
 
-  <script>
   export default {
-    name: 'Login',
+    name: 'Main',
     props: {
       msg: String
+    },
+    methods: {
+      login: function() {
+        var APIservice = new Service_API('http://localhost:3000')
+        var myStorage = window.localStorage
+
+        var user = {
+          //Lee el campo con el nombre del usuario.
+          "username": document.getElementById('username').value,
+          //Lee el campo con la contraseña del usuario.
+          "password": document.getElementById('password').value
+        }
+
+        //Llama al API para hacer el Login.
+        APIservice.login(user).then(function (result) {
+          //Si el login es incorrecto, muestra una ventana de aviso.
+          if (result == "Wrong username or password") {    
+            window.alert(result)
+          } else {
+            //Guarda en Local Storage que el usuario ha iniciado sesión.
+            myStorage.loginStatus = "OK"
+            //Guarda el nombre del usuario en Local Storage.
+            myStorage.username = user.username
+            //Guarda el token devuelto por el API en Local Storage.
+            myStorage.token = result
+            //Recarga la página y con la sesión iniciada ya muestra contenido.
+            //location.reload()
+
+            alert("Hello")
+          }
+        })
+      }
     }
-  }
+  }  
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -1,19 +1,19 @@
 <template>
   <div id="app">
     <div class="title">Welcome to Kiril's car list!</div>
-    <Login msg="Login"/>
+    <Main msg="Main"/>
   </div>
 </template>
 
 <script>
-import Login from './components/Login.vue'
+  import Main from './components/Main.vue'
 
-export default {
-  name: 'app',
-  components: {
-    Login
+  export default {
+    name: 'app',
+    components: {
+      Main
+    }
   }
-}
 </script>
 
 <style>
@@ -28,6 +28,6 @@ export default {
     margin-top: 1em;
     font-size: 40px;
     font-weight: bold;
-	font-family: 'TheBlacklist' !important;
+    font-family: 'TheBlacklist' !important;
   }
 </style>
