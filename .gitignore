@@ -3,3 +3,5 @@
 /client/.cache
 
 /server/node_modules
+
+/vue-client/node_modules

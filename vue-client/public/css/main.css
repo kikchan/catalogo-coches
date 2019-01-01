@@ -1,0 +1,130 @@
+.logoutBox {
+	margin: -5% auto 4% auto;
+	text-align: right;
+}
+
+.availableCarsList {
+    display: none;
+}
+
+.formAddCar {
+    background-color: red;
+}
+
+.button_logout {
+    display: none;
+	background-color: #ff0000;
+	-moz-border-radius: 28px;
+	-webkit-border-radius: 28px;
+	border-radius: 28px;
+	border: 3px solid white;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 17px;
+	padding: 6px 30px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.button_logout:hover {
+	background-color:white;
+	color: #ff0000;
+	font-weight: bold;
+	border: 3px solid #ff0000;
+}
+
+.carTable {
+	width: 100%;
+	color: white;
+}
+
+h2 {
+	border-bottom: solid white 1px;
+}
+
+.carTable thead {
+	text-decoration: underline;
+	color: red;
+	font-size: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+
+td {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	text-align: center;
+	font-size: 15px;
+}
+
+.car_details {
+	color: white;
+	text-decoration: unset;
+}
+
+.car_details:hover {
+	text-decoration: underline;
+}
+
+.car_delete {
+	color: red;
+	text-decoration: unset;
+}
+
+.car_delete:hover {
+	text-decoration: underline;
+}
+
+.car_edit {
+	color: green;
+	text-decoration: unset;
+}
+
+.car_edit:hover {
+	text-decoration: underline;
+}
+
+.carDetails {
+	display: none;
+}
+
+.welcomeUser {
+	display: none;
+}
+
+.addModCar {
+	display: none;
+}
+
+div.formCar {
+	text-align: center;
+}
+
+div.formCar input {
+	text-align: left;
+	margin-bottom: 0.5%;
+}
+
+.button_ok {
+	margin-top: 1em;
+	background-color: green;
+	-moz-border-radius: 28px;
+	-webkit-border-radius: 28px;
+	border-radius: 28px;
+	border: 3px solid white;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 17px;
+	padding: 6px 40px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.button_ok:hover {
+	background-color:white;
+	color: green;
+	font-weight: bold;
+	border: 3px solid green;
+}
