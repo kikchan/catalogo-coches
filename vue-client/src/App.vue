@@ -23,7 +23,7 @@
     src: local('TheBlacklist'), url('../public/fonts/TheBlacklist/TheBlacklist.woff') format('woff'), url('../public/fonts/TheBlacklist/TheBlacklist.ttf') format('truetype');
   }
 
-.title {
+  .title {
     text-align: center;
     margin-top: 1em;
     font-size: 40px;

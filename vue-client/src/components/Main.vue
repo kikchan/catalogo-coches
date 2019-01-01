@@ -2,7 +2,7 @@
   <div class="container" id="container">
     <div class="logoutBox" id="logoutBox">
       <div class="welcomeUser" id="welcomeUser"></div>
-      <input type="button" value="Logout" class="button_logout" id="button_logout">
+      <input type="button" value="Logout" class="button_logout" id="button_logout" @click="logout"/>
     </div>
 
     <div class="loginBox" id="loginBox">
@@ -34,128 +34,144 @@
 </template>
 <script>
   import { Service_API } from '../../public/js/services/Service_API.js'
+        
+  var APIservice = new Service_API('http://localhost:3000')
 
   export default {
     name: 'Main',
     props: {
       msg: String
     },
+    mounted: function() {       
+      
+    },
     methods: {
-      login: function() {
-        var APIservice = new Service_API('http://localhost:3000')
-        var myStorage = window.localStorage
-
+      login: async function() {
         var user = {
           //Lee el campo con el nombre del usuario.
           "username": document.getElementById('username').value,
           //Lee el campo con la contraseña del usuario.
-          "password": document.getElementById('password').value
+          "password": document.getElementById('password').value,
         }
 
+        var token, loginStatus
+
         //Llama al API para hacer el Login.
-        APIservice.login(user).then(function (result) {
+        await APIservice.login(user).then(function (result) {
           //Si el login es incorrecto, muestra una ventana de aviso.
           if (result == "Wrong username or password") {    
             window.alert(result)
           } else {
-            //Guarda en Local Storage que el usuario ha iniciado sesión.
-            myStorage.loginStatus = "OK"
-            //Guarda el nombre del usuario en Local Storage.
-            myStorage.username = user.username
-            //Guarda el token devuelto por el API en Local Storage.
-            myStorage.token = result
-
-            //Recupera el contenedor principal y le añade un fondo negro con 80% de transparencia.
-            var divContainer = document.getElementById('container')
-            divContainer.style.background = "black"
-            divContainer.style.opacity = 0.8
-
-            //Recupera el div del login y lo oculta.
-            var divLoginBox = document.getElementById("loginBox")
-            divLoginBox.style.display = "none"
-
-            //Recupera el botón del logout y lo muestra.
-            var logoutButton = document.getElementById('button_logout')
-            logoutButton.style.display = "inline"
-
-            //Recupera el div que muestra el nombre del usuario e inserta su nombre para saludarlo.
-            var welcomeUser = document.getElementById('welcomeUser')
-            welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + user.username + "&nbsp;</strong><label>"
-            welcomeUser.style.display = "inline"
-
-            //Llamada al API para mostrar todos los coches del catálogo.
-            APIservice.listCars().then(function (data) {
-              //Llama a la función auxiliar "isEmpty" para comprobar que hay coches.
-              if(!isEmpty(data)) {
-                //Recupera el div de la lista de coches disponibles.
-                var divAvailableCars = document.getElementById("availableCarsList")
-                //Inserta la plantilla de la lista de coches en el div anterior.
-                var carsDiv = `
-                  <h2>Available cars in the catalogue</h2>
-                  
-                  <table class="carTable">
-                    <thead>
-                      <tr>
-                        <th scope="col">Maker</th>
-                        <th scope="col">Model</th>
-                        <th scope="col">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                `
-                for(var index = 0; index < data.length; ++index) {
-                  carsDiv += `
-                    <tr>
-                      <td>` + data[index].maker + `</td>
-                      <td>` + data[index].model + `</td>
-                      <td>
-                        <a class="car_details" href="javascript:details(` + data[index].id + `)">Details</a>
-                        <a class="car_edit" href="javascript:editCar(` + data[index].id + `)">Edit</a>
-                        <a class="car_delete" href="javascript:deleteCar(` + data[index].id + `)">Delete</a>
-                      </td>
-                    </tr>
-                  `
-                }
-
-                divAvailableCars.innerHTML = carsDiv + `</tbody></table>`
-
-                //Alinea todos los elementos del div a la izquierda.
-                divAvailableCars.style.textAlign = "left"
-                //Muestra el div al final.
-                divAvailableCars.style.display = "inline"
-                //Si no hay coches en el catálogo, muestra un mensaje de alerta.
-              } else window.alert("There are no cars in the catalogue!")
-
-              //Recupera el div que implementa los campos del formulario y lo muestra.
-              //Se emplea tanto para añadir como para modificar.
-              var divAddCar = document.getElementById('addModCar')
-              divAddCar.style.textAlign = "left"
-              divAddCar.style.display = "inline"
-              
-              //Inicializa los campos del formulario con valores vacios.
-              document.getElementById('maker').value = ""
-              document.getElementById('model').value = ""
-              document.getElementById('year').value = ""
-              document.getElementById('country').value = ""
-              document.getElementById('mileage').value = ""
-              document.getElementById('available').value = ""
-              document.getElementById('price').value = ""
-              //Inicializa el ID del coche a modificar con -1 para que por defecto añada.
-              myStorage.carIDtoEdit = -1
-            })
-          } //else logged
-
-
-          //Función que recibe un objeto y comprueba que está vacio.
-          function isEmpty(obj) {
-            //El for recorre todos los campos existentes en el objeto.
-            for(var key in obj) {
-                if(obj.hasOwnProperty(key))
-                    return false;
-            }
-            return true;
+            loginStatus = 'OK'
+            token = result
           }
         })
+
+        if(loginStatus == 'OK') {
+          //Guarda en Local Storage que el usuario ha iniciado sesión.
+          //myStorage.loginStatus = "OK"
+          this.$store.set('loginStatus', loginStatus)
+          //Guarda el nombre del usuario en Local Storage.
+          //myStorage.username = user.username
+          this.$store.set('username', user.username)
+          //Guarda el token devuelto por el API en Local Storage.
+          //myStorage.token = result
+          this.$store.set('token', token)
+        }
+
+        //Recupera el contenedor principal y le añade un fondo negro con 80% de transparencia.
+        var divContainer = document.getElementById('container')
+        divContainer.style.background = "black"
+        divContainer.style.opacity = 0.8
+
+        //Recupera el div del login y lo oculta.
+        var divLoginBox = document.getElementById("loginBox")
+        divLoginBox.style.display = "none"
+
+        //Recupera el botón del logout y lo muestra.
+        var logoutButton = document.getElementById('button_logout')
+        logoutButton.style.display = "inline"
+
+        //Recupera el div que muestra el nombre del usuario e inserta su nombre para saludarlo.
+        var welcomeUser = document.getElementById('welcomeUser')
+        welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + user.username + "&nbsp;</strong><label>"
+        welcomeUser.style.display = "inline"
+
+        //Llamada al API para mostrar todos los coches del catálogo.
+        await APIservice.listCars().then(function (data) {
+          //Llama a la función auxiliar "isEmpty" para comprobar que hay coches.
+          if(!isEmpty(data)) {
+            //Recupera el div de la lista de coches disponibles.
+            var divAvailableCars = document.getElementById("availableCarsList")
+            //Inserta la plantilla de la lista de coches en el div anterior.
+            var carsDiv = `
+              <h2>Available cars in the catalogue</h2>
+              
+              <table class="carTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Maker</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `
+            for(var index = 0; index < data.length; ++index) {
+              carsDiv += `
+                <tr>
+                  <td>` + data[index].maker + `</td>
+                  <td>` + data[index].model + `</td>
+                  <td>
+                    <a class="car_details" href="javascript:details(` + data[index].id + `)">Details</a>
+                    <a class="car_edit" href="javascript:editCar(` + data[index].id + `)">Edit</a>
+                    <a class="car_delete" href="javascript:deleteCar(` + data[index].id + `)">Delete</a>
+                  </td>
+                </tr>
+              `
+            }
+
+            divAvailableCars.innerHTML = carsDiv + `</tbody></table>`
+
+            //Alinea todos los elementos del div a la izquierda.
+            divAvailableCars.style.textAlign = "left"
+            //Muestra el div al final.
+            divAvailableCars.style.display = "inline"
+            //Si no hay coches en el catálogo, muestra un mensaje de alerta.
+          } else window.alert("There are no cars in the catalogue!")
+        })
+
+        //Recupera el div que implementa los campos del formulario y lo muestra.
+        //Se emplea tanto para añadir como para modificar.
+        var divAddCar = document.getElementById('addModCar')
+        divAddCar.style.textAlign = "left"
+        divAddCar.style.display = "inline"
+        
+        //Inicializa los campos del formulario con valores vacios.
+        document.getElementById('maker').value = ""
+        document.getElementById('model').value = ""
+        document.getElementById('year').value = ""
+        document.getElementById('country').value = ""
+        document.getElementById('mileage').value = ""
+        document.getElementById('available').value = ""
+        document.getElementById('price').value = ""
+        //Inicializa el ID del coche a modificar con -1 para que por defecto añada.
+        //myStorage.carIDtoEdit = -1
+        this.$store.set('carIDtoEdit', -1)
+
+        //Función que recibe un objeto y comprueba que está vacio.
+        function isEmpty(obj) {
+          //El for recorre todos los campos existentes en el objeto.
+          for(var key in obj) {
+              if(obj.hasOwnProperty(key))
+                  return false;
+          }
+          return true;
+        }
+      },
+      logout: function() {
+        this.$store.clearAll()
+        location.reload()
       }
     }
   }  
