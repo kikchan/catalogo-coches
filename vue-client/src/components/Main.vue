@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+  /* eslint-disable */
   import { Service_API } from '../../public/js/services/Service_API.js'
         
   var APIservice = new Service_API('http://localhost:3000')
@@ -41,9 +42,6 @@
     name: 'Main',
     props: {
       msg: String
-    },
-    mounted: function() {       
-      
     },
     methods: {
       login: async function() {
@@ -77,8 +75,16 @@
           //Guarda el token devuelto por el API en Local Storage.
           //myStorage.token = result
           this.$store.set('token', token)
+          window.location.reload()
         }
-
+      },
+      logout: function() {
+        this.$store.clearAll()
+        location.reload()
+      }
+    },
+    mounted: async function() {
+      if(this.$store.get('loginStatus') == 'OK') {
         //Recupera el contenedor principal y le añade un fondo negro con 80% de transparencia.
         var divContainer = document.getElementById('container')
         divContainer.style.background = "black"
@@ -94,7 +100,8 @@
 
         //Recupera el div que muestra el nombre del usuario e inserta su nombre para saludarlo.
         var welcomeUser = document.getElementById('welcomeUser')
-        welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + user.username + "&nbsp;</strong><label>"
+        var username = this.$store.get('username')
+        welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + username + "&nbsp;</strong><label>"
         welcomeUser.style.display = "inline"
 
         //Llamada al API para mostrar todos los coches del catálogo.
@@ -168,13 +175,9 @@
           }
           return true;
         }
-      },
-      logout: function() {
-        this.$store.clearAll()
-        location.reload()
       }
     }
-  }  
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
