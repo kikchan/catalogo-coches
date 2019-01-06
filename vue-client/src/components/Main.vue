@@ -14,6 +14,7 @@
 
     <div class="carDetails" id="carDetails"></div>
     <div class="availableCarsList" id="availableCarsList"></div>
+    <a class="car_details" @click="details(2)">Details</a>
 
     <div class="addModCar" id="addModCar">
       <h2>Add or modify a car</h2>
@@ -81,6 +82,24 @@
       logout: function() {
         this.$store.clearAll()
         location.reload()
+      },
+      hola: function() {
+        alert("Hola k ase")
+      },
+      details: function(id) {
+        alert("Ya furula")
+
+        //Llama al API para buscar el coche.
+        APIservice.getCar(id).then(function (data) {
+          //Recupera el div que muestra los datos del vehículo.
+          var divCarDetails = document.getElementById("carDetails")
+          //Llama a la plantilla de handlebars con los datos del coche y lo inserta.
+          divCarDetails.innerHTML = tmpl_carDetails_compiled(data)
+          //Alinea todos los elementos del div a la izquierda.
+          divCarDetails.style.textAlign = "left"
+          //Por último, muestra el contenedor.
+          divCarDetails.style.display = "inline"
+        })
       }
     },
     mounted: async function() {
@@ -111,7 +130,7 @@
             //Recupera el div de la lista de coches disponibles.
             var divAvailableCars = document.getElementById("availableCarsList")
             //Inserta la plantilla de la lista de coches en el div anterior.
-            var carsDiv = `
+              var carsDiv = `
               <h2>Available cars in the catalogue</h2>
               
               <table class="carTable">
@@ -130,7 +149,7 @@
                   <td>` + data[index].maker + `</td>
                   <td>` + data[index].model + `</td>
                   <td>
-                    <a class="car_details" href="javascript:details(` + data[index].id + `)">Details</a>
+                    <a class='car_details' onclick='hola'>Details</a>
                     <a class="car_edit" href="javascript:editCar(` + data[index].id + `)">Edit</a>
                     <a class="car_delete" href="javascript:deleteCar(` + data[index].id + `)">Delete</a>
                   </td>
@@ -271,6 +290,16 @@
 
   h2 {
     border-bottom: solid white 1px;
+  }
+
+  .noButton {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
   }
 
   .carDetails {
