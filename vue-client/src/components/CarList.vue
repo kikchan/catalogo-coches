@@ -36,6 +36,10 @@
         name: "CarList",
         components: {
             Car
+        },
+        beforeMount: async function() {
+            //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
+            await this.$store.set('cars', await APIservice.listCars())
         }
     }
 </script>

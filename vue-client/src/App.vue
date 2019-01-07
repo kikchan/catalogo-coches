@@ -84,8 +84,6 @@
           //Guarda el token devuelto por el API en Local Storage.
           //myStorage.token = result
           this.$store.set('token', token)
-          //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
-          this.$store.set('cars', await APIservice.listCars())
           window.location.reload()
         }
       },
@@ -112,23 +110,23 @@
         else {
           //Comprueba que el ID del coche a editar sea mayor o igual que 0.
           if(this.$store.get('carIDtoEdit') >= 0) {
-            //Añade el campo ID a los datos anteriores del coche.
-            car.id = this.$store.get('carIDtoEdit')
-            //Llama al API para que sustituya el coche. Le pasa el token.
-            APIservice.editCar(car, this.$store.get('token'))
-            //Llama al API para añadir un coche nuevo. Le pasa los datos del coche y el token.
+          //Añade el campo ID a los datos anteriores del coche.
+          car.id = this.$store.get('carIDtoEdit')
+          //Llama al API para que sustituya el coche. Le pasa el token.
+          APIservice.editCar(car, this.$store.get('token'))
+          //Llama al API para añadir un coche nuevo. Le pasa los datos del coche y el token.
           } else APIservice.addCar(car, this.$store.get('token'))
-          
-          //Recarga la página para reflejar los cambios.
+
+          //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
+          await this.$store.set('cars', await APIservice.listCars())
+
+          //Recarga la página tras medio segundo de espera.
           location.reload()
         }
       }
     },
     mounted: async function() {
       if(this.$store.get('logged')) {
-        //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
-        this.$store.set('cars', await APIservice.listCars())
-        
         //Recupera el contenedor principal y le añade un fondo negro con 80% de transparencia.
         var divContainer = document.getElementById('container')
         divContainer.style.background = "black"
@@ -148,10 +146,7 @@
         document.getElementById('available').value = ""
         document.getElementById('price').value = ""
         //Inicializa el ID del coche a modificar con -1 para que por defecto añada.
-        this.$store.set('carIDtoEdit',-1)
-
-        //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
-        this.$store.set('cars', await APIservice.listCars())
+        this.$store.set('carIDtoEdit', -1)
       }
     }
   }

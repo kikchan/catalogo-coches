@@ -57,9 +57,9 @@
                     divCarDetails.innerHTML = carDetails
                 })
             },
-            editCar() {
+            editCar: async function() {
                 //Primero llama al API para recuperar el coche cuyos datos queremos cambiar.
-                APIservice.getCar(this.id).then(function (car) {
+                await APIservice.getCar(this.id).then(function (car) {
                     //Luego rellena los campos del formulario con los datos recuperados por el API.
                     document.getElementById('maker').value = car.maker
                     document.getElementById('model').value = car.model
@@ -71,9 +71,7 @@
                 })
 
                 //Almacena en Local Storage el ID del coche que queremos editar.
-                this.$store.set('carIDtoEdit', id)
-
-                location.reload()
+                this.$store.set('carIDtoEdit', this.id)
             },
             deleteCar: async function() {
                 await APIservice.deleteCar(this.id, this.$store.get('token'))
