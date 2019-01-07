@@ -1,22 +1,108 @@
 <template>
   <div id="app">
     <div class="title">Welcome to Kiril's car list!</div>
-    <Main msg="Login"/>
+
+    <div class="container" id="container">   
+      <div v-if="this.$store.get('logged')" class="logoutBox">
+        <div class="welcomeUser" id="welcomeUser"></div>
+        <input type="button" value="Logout" class="button_logout" id="button_logout" @click="logout"/>
+      </div>
+
+      <div v-if="!this.$store.get('logged')" class="loginBox">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username"/><br>
+        <input type="password" id="password" placeholder="Password"/><br>
+        <input type="button" value="Login" class="button_login" @click="login"/>
+      </div>
+
+      <div v-if="!this.$store.get('logged')" class="carDetails" id="carDetails"></div>
+
+      <CarList />   
+    </div>
   </div>
 </template>
 
 <script>
-  import Main from './components/Main.vue'
+  import CarList from './components/CarList'
+  import { Service_API } from '../public/js/services/Service_API.js'
+  
+  var APIservice = new Service_API('http://localhost:3000')
 
   export default {
-    name: 'app',
+    name: 'App',
     components: {
-      Main
+      CarList
+    },
+    methods: {
+      login: async function() {
+        var user = {
+          //Lee el campo con el nombre del usuario.
+          "username": document.getElementById('username').value,
+          //Lee el campo con la contraseña del usuario.
+          "password": document.getElementById('password').value,
+        }
+
+        var token, logged
+
+        //Llama al API para hacer el Login.
+        await APIservice.login(user).then(function (result) {
+          //Si el login es incorrecto, muestra una ventana de aviso.
+          if (result == "Wrong username or password") {    
+              window.alert(result)
+          } else {
+              logged = true
+              token = result
+          }
+        })
+
+        if(logged) {
+          //Guarda en Local Storage que el usuario ha iniciado sesión.
+          //myStorage.logged = "OK"
+          this.$store.set('logged', logged)
+          //Guarda el nombre del usuario en Local Storage.
+          //myStorage.username = user.username
+          this.$store.set('username', user.username)
+          //Guarda el token devuelto por el API en Local Storage.
+          //myStorage.token = result
+          this.$store.set('token', token)
+          window.location.reload()
+        }
+      },
+      logout: function() {
+          this.$store.clearAll()
+          location.reload()
+      }
+    },
+    mounted: function() {
+      if(this.$store.get('logged')) {
+        //Recupera el contenedor principal y le añade un fondo negro con 80% de transparencia.
+        var divContainer = document.getElementById('container')
+        divContainer.style.background = "black"
+        divContainer.style.opacity = 0.8
+        
+        //Recupera el div que muestra el nombre del usuario e inserta su nombre para saludarlo.
+        var welcomeUser = document.getElementById('welcomeUser')
+        var username = this.$store.get('username')
+        welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + username + "&nbsp;</strong><label>"
+        welcomeUser.style.display = "inline"
+      }
     }
   }
 </script>
 
 <style>
+  .container {
+    text-align: center;
+    background: url('../public/images/container-background.jpg') no-repeat;
+    background-position: center 60%;
+    background-size: 100%;
+    border: solid black 4px;
+    margin: 2em auto 0 auto;
+    padding: 4em 4em 2em 4em;
+    width: 50%;
+    color: white;
+  }
+
   @font-face {
     font-family: 'TheBlacklist';
     src: url('../public/fonts/TheBlacklist/TheBlacklist.eot');
@@ -31,49 +117,73 @@
     font-family: 'TheBlacklist' !important;
   }
 
-  .carTable {
-    width: 100%;
-    color: white;
+  .welcomeUser {
+    display: none;
   }
 
-  .carTable thead {
-    text-decoration: underline;
-    color: red;
-    font-size: 20px;
-    text-align: center;
+  div.container div.loginBox h2 {
+    color: white;
+    text-shadow: 2px 2px black;
+    border: none;
+  }
+
+  .loginBox input[type="button"] {
+      margin-top: 2em;
+  }
+
+  .loginBox {
+    margin-left: -10%;
+    width: 50%;
+  }
+
+  .button_login {
+    background-color:#456ac7;
+    -moz-border-radius: 28px;
+    -webkit-border-radius: 28px;
+    border-radius: 28px;
+    border: 3px solid white;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 6px 30px;
+    text-decoration: none;
     font-weight: bold;
   }
 
-  td {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
-    font-size: 15px;
+  .button_login:hover {
+    background-color:white;
+    color: #456ac7;
+    font-weight: bold;
+    border: 3px solid #456ac7;
   }
 
-  .car_details {
-    color: white;
-    text-decoration: unset;
+  .logoutBox {
+    margin: -5% auto 4% auto;
+    text-align: right;
   }
 
-  .car_details:hover {
-    text-decoration: underline;
+  .button_logout {
+    background-color: #ff0000;
+    -moz-border-radius: 28px;
+    -webkit-border-radius: 28px;
+    border-radius: 28px;
+    border: 3px solid white;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 6px 30px;
+    text-decoration: none;
+    font-weight: bold;
   }
 
-  .car_delete {
-    color: red;
-    text-decoration: unset;
+  .button_logout:hover {
+    background-color:white;
+    color: #ff0000;
+    font-weight: bold;
+    border: 3px solid #ff0000;
   }
 
-  .car_delete:hover {
-    text-decoration: underline;
-  }
-
-  .car_edit {
-    color: green;
-    text-decoration: unset;
-  }
-
-  .car_edit:hover {
-    text-decoration: underline;
-  }
 </style>
