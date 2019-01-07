@@ -72,11 +72,14 @@
 
                 //Almacena en Local Storage el ID del coche que queremos editar.
                 this.$store.set('carIDtoEdit', id)
+
+                location.reload()
             },
-            deleteCar() {
-                APIservice.deleteCar(id, myStorage.token).then(function () {
-                    location.reload()
-                })
+            deleteCar: async function() {
+                await APIservice.deleteCar(this.id, this.$store.get('token'))
+                //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
+                this.$store.set('cars', await APIservice.listCars())
+                location.reload()
             }
         }
     };

@@ -115,10 +115,10 @@
             //Añade el campo ID a los datos anteriores del coche.
             car.id = this.$store.get('carIDtoEdit')
             //Llama al API para que sustituya el coche. Le pasa el token.
-            await APIservice.editCar(car, this.$store.get('token'))
+            APIservice.editCar(car, this.$store.get('token'))
             //Llama al API para añadir un coche nuevo. Le pasa los datos del coche y el token.
-          } else await APIservice.addCar(car, this.$store.get('token'))
-
+          } else APIservice.addCar(car, this.$store.get('token'))
+          
           //Recarga la página para reflejar los cambios.
           location.reload()
         }
@@ -149,6 +149,9 @@
         document.getElementById('price').value = ""
         //Inicializa el ID del coche a modificar con -1 para que por defecto añada.
         this.$store.set('carIDtoEdit',-1)
+
+        //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
+        this.$store.set('cars', await APIservice.listCars())
       }
     }
   }
