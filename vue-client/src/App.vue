@@ -3,21 +3,24 @@
     <div class="title">Welcome to Kiril's car list!</div>
 
     <div class="container" id="container">   
-      <div v-if="this.$store.get('logged')" class="logoutBox">
-        <div class="welcomeUser" id="welcomeUser"></div>
-        <input type="button" value="Logout" class="button_logout" id="button_logout" @click="logout"/>
+      <div v-if="!this.$store.get('logged')">
+        <div class="loginBox">
+          <h2>Login</h2>
+          <input type="text" id="username" placeholder="Username"/><br>
+          <input type="password" id="password" placeholder="Password"/><br>
+          <input type="button" value="Login" class="button_login" @click="login"/>
+        </div>
       </div>
+      <div v-else>
+        <div class="logoutBox" id="logoutBox">
+          <div class="welcomeUser" id="welcomeUser"></div>
+          <input type="button" value="Logout" class="button_logout" id="button_logout" @click="logout"/>
+        </div>
 
-      <div v-if="!this.$store.get('logged')" class="loginBox">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username"/><br>
-        <input type="password" id="password" placeholder="Password"/><br>
-        <input type="button" value="Login" class="button_login" @click="login"/>
+        <div class="carDetails" id="carDetails"></div>
+
+        <CarList/>
       </div>
-
-      <div v-if="!this.$store.get('logged')" class="carDetails" id="carDetails"></div>
-
-      <CarList />   
     </div>
   </div>
 </template>
@@ -65,6 +68,8 @@
           //Guarda el token devuelto por el API en Local Storage.
           //myStorage.token = result
           this.$store.set('token', token)
+          //Llama al API para obtener el listado de todos los coches y lo guarda en la sesión
+          this.$store.set('cars', await APIservice.listCars())
           window.location.reload()
         }
       },
@@ -79,7 +84,7 @@
         var divContainer = document.getElementById('container')
         divContainer.style.background = "black"
         divContainer.style.opacity = 0.8
-        
+
         //Recupera el div que muestra el nombre del usuario e inserta su nombre para saludarlo.
         var welcomeUser = document.getElementById('welcomeUser')
         var username = this.$store.get('username')

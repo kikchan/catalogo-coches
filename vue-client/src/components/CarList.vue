@@ -1,19 +1,20 @@
 <template>
-    <div>
+    <div id="availableCarsList" class="availableCarsList">
         <h2>Available cars in the catalogue</h2>
 
         <table class="carTable">
             <thead>
                 <tr>
-                    <th scope="col">Maker</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Actions</th>
+                <th scope="col">Maker</th>
+                <th scope="col">Model</th>
+                <th scope="col">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-for="i in list" :key="i.id">
-                    <td>123123</td>
-                </tr>
+            <tbody v-for="i in this.$store.get('cars')" :key="i.id">
+                <car 
+                    :maker="i.maker"
+                    :model="i.model"
+                    :id="i.id"/>
             </tbody>
         </table>
     </div>
@@ -30,13 +31,6 @@
         name: "CarList",
         components: {
             Car
-        },
-        computed: {
-            list: async function() {
-                await APIservice.listCars().then(function(data) {
-                    return data
-                })
-            }
         }
     }
 </script>
@@ -58,5 +52,9 @@
     font-size: 20px;
     text-align: center;
     font-weight: bold;
+  }
+
+  h2 {
+    border-bottom: solid white 1px;
   }
 </style>

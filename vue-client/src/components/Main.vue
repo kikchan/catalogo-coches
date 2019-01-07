@@ -201,35 +201,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
-  .availableCarsList {
-    display: none;
-  }
-
   .formAddCar {
       background-color: red;
   }
 
-
-  h2 {
-    border-bottom: solid white 1px;
-  }
-
-  .noButton {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-  }
-
   .carDetails {
-    display: none;
-  }
-
-  .welcomeUser {
     display: none;
   }
 
