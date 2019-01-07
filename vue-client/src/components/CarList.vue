@@ -5,16 +5,21 @@
         <table class="carTable">
             <thead>
                 <tr>
-                <th scope="col">Maker</th>
-                <th scope="col">Model</th>
-                <th scope="col">Actions</th>
+                    <th scope="col">Maker</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody v-for="i in this.$store.get('cars')" :key="i.id">
                 <car 
+                    :id="i.id"
                     :maker="i.maker"
                     :model="i.model"
-                    :id="i.id"/>
+                    :year="i.year"
+                    :country="i.country"
+                    :mileage="i.mileage"
+                    :available="i.available"
+                    :price="i.price"/>
             </tbody>
         </table>
     </div>

@@ -89,7 +89,6 @@
         var welcomeUser = document.getElementById('welcomeUser')
         var username = this.$store.get('username')
         welcomeUser.innerHTML = "<label style=\"text-align: left\">Hello <strong>" + username + "&nbsp;</strong><label>"
-        welcomeUser.style.display = "inline"
       }
     }
   }
@@ -123,7 +122,7 @@
   }
 
   .welcomeUser {
-    display: none;
+    display: inline;
   }
 
   div.container div.loginBox h2 {
@@ -133,7 +132,7 @@
   }
 
   .loginBox input[type="button"] {
-      margin-top: 2em;
+    margin-top: 2em;
   }
 
   .loginBox {
@@ -191,4 +190,7 @@
     border: 3px solid #ff0000;
   }
 
+  .carDetails {
+    text-align: left;
+  }
 </style>

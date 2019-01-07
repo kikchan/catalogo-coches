@@ -3,9 +3,9 @@
         <td>{{maker}}</td>
         <td>{{model}}</td>
         <td>
-            <a class="car_details" v-on:click="detailsCar">Details</a>
-            <a class="car_edit" v-on:click="editCar">Edit</a>
-            <a class="car_delete" v-on:click="deleteCar">Delete</a>
+            <a class="car_details" v-on:click="detailsCar"> Details </a>
+            <a class="car_edit" v-on:click="editCar"> Edit </a>
+            <a class="car_delete" v-on:click="deleteCar"> Delete </a>
         </td>
     </tr>
 </template>
@@ -20,16 +20,41 @@
         name: "Car",
         props: ['id', 'maker', 'model', 'year', 'country', 'mileage', 'available', 'price'],
         methods: {
-            detailsCar: function() {
-                APIservice.getCar(this.id).then(function (data) {
+            detailsCar() {
+                APIservice.getCar(this.id).then(function (car) {
+                    //Plantilla que dibuja una tabla y la rellena con los datos del coche.
+                    var carDetails = `
+                    <h2 style="border-bottom: solid white 1px">Car details</h2>
+                    
+                    <table style="width: 100%; color: white">
+                        <thead>
+                        <tr style="font-weight: bold; color: red; font-size: 20px; text-align: center">
+                            <th scope="col">Maker</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Country</th>
+                            <th scope="col">Mileage</th>
+                            <th scope="col">Available</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="text-align: center">
+                            <td>` + car.maker + `</td>
+                            <td>` + car.model + `</td>
+                            <td>` + car.year + `</td>
+                            <td>` + car.country + `</td>
+                            <td>` + car.mileage + ` km</td>
+                            <td>` + car.available + `</td>
+                            <td>` + car.price + ` €</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    `
+
                     //Recupera el div que muestra los datos del vehículo.
                     var divCarDetails = document.getElementById("carDetails")
-                    //Llama a la plantilla de handlebars con los datos del coche y lo inserta.
-                    //divCarDetails.innerHTML = tmpl_carDetails_compiled(data)
-                    //Alinea todos los elementos del div a la izquierda.
-                    divCarDetails.style.textAlign = "left"
-                    //Por último, muestra el contenedor.
-                    divCarDetails.style.display = "inline"
+                    divCarDetails.innerHTML = carDetails
                 })
             }
         }
@@ -38,35 +63,38 @@
 
 <style scoped>
     td {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
-    font-size: 15px;
-  }
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        font-size: 15px;
+    }
+    
+    .car_details {
+        color: white;
+        text-decoration: unset;
+        cursor: pointer;
+    }
 
-  .car_details {
-    color: white;
-    text-decoration: unset;
-  }
+    .car_details:hover {
+        text-decoration: underline;
+    }
 
-  .car_details:hover {
-    text-decoration: underline;
-  }
+    .car_delete {
+        color: red;
+        text-decoration: unset;
+        cursor: pointer;
+    }
 
-  .car_delete {
-    color: red;
-    text-decoration: unset;
-  }
+    .car_delete:hover {
+        text-decoration: underline;
+    }
 
-  .car_delete:hover {
-    text-decoration: underline;
-  }
+    .car_edit {
+        color: green;
+        text-decoration: unset;
+        cursor: pointer;
+    }
 
-  .car_edit {
-    color: green;
-    text-decoration: unset;
-  }
-
-  .car_edit:hover {
-    text-decoration: underline;
-  }
+    .car_edit:hover {
+        text-decoration: underline;
+    }
 </style>
