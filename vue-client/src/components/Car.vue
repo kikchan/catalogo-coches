@@ -56,6 +56,27 @@
                     var divCarDetails = document.getElementById("carDetails")
                     divCarDetails.innerHTML = carDetails
                 })
+            },
+            editCar() {
+                //Primero llama al API para recuperar el coche cuyos datos queremos cambiar.
+                APIservice.getCar(this.id).then(function (car) {
+                    //Luego rellena los campos del formulario con los datos recuperados por el API.
+                    document.getElementById('maker').value = car.maker
+                    document.getElementById('model').value = car.model
+                    document.getElementById('year').value = car.year
+                    document.getElementById('country').value = car.country
+                    document.getElementById('mileage').value = car.mileage
+                    document.getElementById('available').value = car.available
+                    document.getElementById('price').value = car.price
+                })
+
+                //Almacena en Local Storage el ID del coche que queremos editar.
+                this.$store.set('carIDtoEdit', id)
+            },
+            deleteCar() {
+                APIservice.deleteCar(id, myStorage.token).then(function () {
+                    location.reload()
+                })
             }
         }
     };
